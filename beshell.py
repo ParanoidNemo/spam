@@ -31,7 +31,7 @@ import check
 project_dir = os.path.expanduser('~/project/be-shell')
 g = git.cmd.Git(project_dir)
 
-def up():
+def up(): #DA FINIRE
     if check.dir(project_dir):
         ctrl_seq = 'Already up-to-date.'
         git_out = g.pull()
@@ -53,3 +53,19 @@ def up():
             print('Everything done, BE::Shell is now up to date')
     else:
         print('Project directory not found')
+
+def install(): #DA CREARE
+
+def theme():
+    if os.path.isdir(os.path.expanduser('~/.kde4')):
+        cfg_dir = os.path.expanduser('~/.kde4/share/config/')
+        be_dir = os.path.expanduser('~.kde4/share/apps/be.shell/')
+    else:
+        cfg_dir = os.path.expanduser('~.kde/share/config/')
+        be_dir = os.path.expanduser('~.kde/share/apps/be.shell/')
+    cfg = open(cfg_dir + 'be.shell')
+    for line in cfg:
+        l = cfg.readline()
+        if l.startswith('Theme'):
+            theme = l[6:-1]
+            theme_dir = be_dir + 'Themes/' + l[6:-1]
