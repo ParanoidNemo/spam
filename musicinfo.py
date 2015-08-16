@@ -23,34 +23,56 @@ import os.path
 
 #import web module(s)
 import mpd
+from mpd import MPDClient
 
 #initialize client
 mpd_client = mpd.MPDClient()
 mpd_client.timeout = 10
 mpd_client.idletimeout = None
 mpd_client.connect('localhost', 6600)
+mpd_status = mpd_client.status()['state']
 
 #retrive mpd info
-mpd_status = mpd_client.status()['state']
-mpd_volume = mpd_client.status()['volume']
+def state():
+    mpd_status = mpd_client.status()['state']
+    mpd_volume = mpd_client.status()['volume']
+    return(mpd_status, mpd_volume)
 
 #retrive current song info
-c_artist = mpd_client.currentsong()['artist']
-c_title = mpd_client.currentsong()['title']
-c_album = mpd_client.currentsong()['album']
-c_track = mpd_client.currentsong()['track']
+def current():
+    if not mpd_status == 'stop':
+        c_artist = mpd_client.currentsong()['artist']
+        c_title = mpd_client.currentsong()['title']
+        c_album = mpd_client.currentsong()['album']
+        c_track = mpd_client.currentsong()['track']
+    else:
+        c_artist = 'n/a'
+        c_title = 'n/a'
+        c_album = 'n/a'
+        c_track = 'n/a'
+    return(c_track, c_title, c_artist, c_album)
 
 #retrive mpd option
-mpd_random = mpd_client.status()['random']
-mpd_repeat = mpd_client.status()['repeat']
-mpd_consume = mpd_client.status()['consume']
+def option():
+    mpd_random = mpd_client.status()['random']
+    mpd_repeat = mpd_client.status()['repeat']
+    mpd_consume = mpd_client.status()['consume']
 
-#start defining function
+
+#retriving playlist info
 def playlist():
     mpd_client.iterate = True
     for song in mpd_client.playlistinfo():
+        if not len(song['pos']) == 1:
+            pos_val = int(song['pos']) + 1
+            pos = str('0' + str(pos_val))
+        else:
+            pos_val = int(song['pos']) + 1
+            pos = str(pos_val)
         if len(song['title']) > 30:
             title = str(song['title'])[:28] + '..'
         else:
             title = song['title']
-        print(song['id'] if len(song['id']) is not 1 else '0' + song['id']), '-', title, song['artist'])
+        print(song['id'] if len(song['id']) is not 1 else '0' + song(['id']), '-', title, song['artist'])
+
+#def cover():
