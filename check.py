@@ -19,22 +19,28 @@
 
 import os.path
 import os
+import sys
+import datetime
 
-#start def the function
-def prg(self):  #check if an executable exists in /usr/bin/
+#start def the function(s)
+def prg(self):      #check if an executable exists in /usr/bin/
     if os.path.exists('/usr/bin/' + self):
         return True
     else:
         return False
 
-def dir(self):
+def dir(self):      #check if a dir exists into the given path
     if os.path.isdir(os.path.expanduser(self)):
         return True
     else:
         print('Directory not found, you want to create one into the default location (~/project/)? [yes/no]')
         anw = input()
         if anw == 'yes':
-            os.makedirs(self) #find how to create the parent dir if needed
+            os.makedirs(self)
             print('Created directory ' + self)
         else:
             raise KeyboardInterrupt('Nothing to do')
+            sys.exit(1)
+
+def date(self, mesure=days):     #check how much time as passed (default=days) between to given dates
+    today = datetime.datetime.date(now)
