@@ -49,8 +49,8 @@ mpd_consume = mpd_client.status()['consume']
 def playlist():
     mpd_client.iterate = True
     for song in mpd_client.playlistinfo():
-        #if len(song['title']) >= 30:
-            #title = str.
-            #aggiungere metodo per togliere le ultime righe e sostituirle con ...
-            #se str > di 30 caratteri
+        if len(song['title']) > 30:
+            title = str(song['title'])[:28] + '..'
+        else:
+            title = song['title']
         print(song['id'] if len(song['id']) is not 1 else '0' + song['id']), '-', title, song['artist'])
