@@ -54,18 +54,19 @@ def up(): #DA FINIRE
     else:
         print('Project directory not found')
 
-def install(): #DA CREARE
+#def install(): #DA CREARE
 
 def theme():
     if os.path.isdir(os.path.expanduser('~/.kde4')):
         cfg_dir = os.path.expanduser('~/.kde4/share/config/')
-        be_dir = os.path.expanduser('~.kde4/share/apps/be.shell/')
+        be_dir = os.path.expanduser('~/.kde4/share/apps/be.shell/')
     else:
-        cfg_dir = os.path.expanduser('~.kde/share/config/')
-        be_dir = os.path.expanduser('~.kde/share/apps/be.shell/')
+        cfg_dir = os.path.expanduser('~/.kde/share/config/')
+        be_dir = os.path.expanduser('~/.kde/share/apps/be.shell/')
     cfg = open(cfg_dir + 'be.shell')
     for line in cfg:
         l = cfg.readline()
         if l.startswith('Theme'):
-            theme = l[6:-1]
+            theme_name = l[6:-1]
             theme_dir = be_dir + 'Themes/' + l[6:-1]
+    return theme_dir, theme_name
