@@ -24,6 +24,7 @@ import subprocess
 
 #import downloaded module(s)
 import git
+import keyring
 
 #import custom module(s)
 import check
@@ -35,21 +36,15 @@ def up(): #DA FINIRE
     if check.dir(project_dir):
         ctrl_seq = 'Already up-to-date.'
         git_out = g.pull()
-#-------------------------------------------------------------------------------
-#----------------DA QUI DA RICONTROLLARE A MENTE FRESCA-------------------------
-#-------------------------------------------------------------------------------
+
         if git_out != ctrl_seq:
             os.chdir('build')
             #Prova 1 -- PROBLEMA, NON PRINTA IN TEMPO REALE
-            make_out = str(subprocess.check_output('make', shell=True), 'utf-8')
-            print(make_out, end='[')
-            #Prova 2 -- PROBLEMA, NON ESCE ALLA FINE DELL'OPERAZIONE
-            subprocess.Popen('make')
-#-------------------------------------------------------------------------------
-#---------------Da qui inizio istruzioni di installazione post make-------------
-#-------------------------------------------------------------------------------
+            print('Running make, please wait..')
+            make_out = str(subprocess.check_output('make'), 'utf-8')
+            #print(make_out, end='[')
+            print('Make process end correctly.\nStart installation..')
             install_out = str(subprocess.check_output(['sudo', 'make', 'install']), 'utf-8') #verificare se chiama sudo o se bisogna usare un metodo particolare
-            print(install_out)
             print('Everything done, BE::Shell is now up to date')
     else:
         print('Project directory not found')
