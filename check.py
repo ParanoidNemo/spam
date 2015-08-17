@@ -42,5 +42,5 @@ def dir(self):      #check if a dir exists into the given path
             raise KeyboardInterrupt('Nothing to do')
             sys.exit(1)
 
-def date(self, mesure=days):     #check how much time as passed (default=days) between to given dates
-    today = datetime.datetime.date(now)
+#def date(self, mesure=days):     #check how much time as passed (default=days) between to given dates
+#    today = datetime.datetime.date(now)

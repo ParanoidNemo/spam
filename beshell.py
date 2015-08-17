@@ -48,7 +48,7 @@ def up(): #DA FINIRE
 #-------------------------------------------------------------------------------
 #---------------Da qui inizio istruzioni di installazione post make-------------
 #-------------------------------------------------------------------------------
-            install_out = str(subprocess.check_output('sudo make install', shell=True), 'utf-8') #verificare se chiama sudo o se bisogna usare un metodo particolare
+            install_out = str(subprocess.check_output(['sudo', 'make', 'install']), 'utf-8') #verificare se chiama sudo o se bisogna usare un metodo particolare
             print(install_out)
             print('Everything done, BE::Shell is now up to date')
     else:
