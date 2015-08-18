@@ -33,7 +33,7 @@ def dir(self):      #check if a dir exists into the given path
     if os.path.isdir(os.path.expanduser(self)):
         return True
     else:
-        print('Directory not found, do you want to create one into the default location (~/project/)? [yes/no]')
+        print('Directory not found, do you want to create it? [yes/no]')
         if input() == 'yes':
             os.makedirs(self)
             print('Created directory ' + self)
