@@ -39,13 +39,10 @@ def up(): #DA FINIRE
 
         if git_out != ctrl_seq:
             os.chdir('build')
-            #Prova 1 -- PROBLEMA, NON PRINTA IN TEMPO REALE
             print('Running make, please wait..')
-            make_out = str(subprocess.check_output('make'), 'utf-8')
-            #print(make_out, end='[')
+            make_out = subprocess.check_call('make')
             print('Make process end correctly.\nStart installation..')
-            install_out = str(subprocess.check_output(['sudo', 'make', 'install']), 'utf-8')
-            #verificare se chiama sudo o se bisogna usare un metodo particolare
+            install_out = subprocess.check_call(['sudo', 'make', 'install'])
             print('Everything done, BE::Shell is now up to date')
     else:
         print('Project directory not found')
