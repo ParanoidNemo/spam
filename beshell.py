@@ -29,27 +29,31 @@ import git
 #import custom module(s)
 import check
 
-project_dir = os.path.expanduser('~/project/be-shell/')
-g = git.cmd.Git(project_dir)
+project_dir = os.path.expanduser('~/project/')
+beshell_dir = os.path.expanduser(project_dir + 'be-shell/')
+g = git.cmd.Git(beshell_dir)
 
 def up():
-    if check.dir(project_dir):
-        os.chdir(project_dir)
+    if check.dir(beshell_dir):
         ctrl_seq = 'Already up-to-date.'
         git_out = g.pull()
 
         if git_out != ctrl_seq:
-            os.chdir('build')
+            os.chdir(beshell_dir + 'build')
             print('Running make, please wait..')
             make_out = subprocess.check_call('make')
             print('Make process end correctly.\nStart installation..')
             install_out = subprocess.check_call(['sudo', 'make', 'install'])
             print('Everything done, BE::Shell is now up to date.')
+        else:
+            print(git_out)  #check if needed when I've connection
 
 def install():
     if check.dir(project_dir):
         os.chdir(project_dir)
-        print('Configuring the system, please wait..')
+        print('Cloning package(s) from remote repo..')
+        clone_out = g.clone(indirizzo, 'be-shell')       #search how to clone a remote repo
+        print('Configuring the system..')
         configure_out = subprocess.check_call('./configure')
         os.chdir('build')
         print('Running make, please wait..')
