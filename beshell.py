@@ -62,17 +62,20 @@ def install():
         install_out = subprocess.check_call(['sudo', 'make', 'install'])
         print('Everything done, BE::Shell is now installed.\nIf you want to start it run "kquitapp plasmashell; sleep 2; be.shell"')
 
-def theme():
+def config_dir():
     if os.path.isdir(os.path.expanduser('~/.kde4')):
         cfg_dir = os.path.expanduser('~/.kde4/share/config/')
         be_dir = os.path.expanduser('~/.kde4/share/apps/be.shell/')
     else:
         cfg_dir = os.path.expanduser('~/.kde/share/config/')
         be_dir = os.path.expanduser('~/.kde/share/apps/be.shell/')
-    cfg = open(cfg_dir + 'be.shell')
+    return({'config': cfg_dir, 'theme': be_dir})
+
+def theme():
+    cfg = open(config_dir()['config'] + 'be.shell')
     for line in cfg:
         l = cfg.readline()
         if l.startswith('Theme'):
             theme_name = l[6:-1]
-            theme_dir = be_dir + 'Themes/' + l[6:-1]
-    return theme_dir, theme_name
+            theme_dir = config_dir()['theme'] + 'Themes/' + l[6:-1]
+    return({'dir': theme_dir, 'name': theme_name})
