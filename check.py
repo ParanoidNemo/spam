@@ -34,8 +34,7 @@ def dir(self):      #check if a dir exists into the given path
         return True
     else:
         print('Directory not found, do you want to create one into the default location (~/project/)? [yes/no]')
-        anw = input()
-        if anw == 'yes':
+        if input() == 'yes':
             os.makedirs(self)
             print('Created directory ' + self)
             return True
