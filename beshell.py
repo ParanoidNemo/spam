@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #   Copyright (C) 2015 by Andrea Calzavacca <paranoid.nemo@gmail.com>
 #
 #   This program is free software; you can redistribute it and/or modify
@@ -15,16 +17,14 @@
 #   Free Software Foundation, Inc.,
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#!/usr/bin/env python
-
 #import std module(s)
 import os, sys
 import os.path
 import subprocess
+import getpass
 
 #import downloaded module(s)
 import git
-import keyring
 
 #import custom module(s)
 import check
@@ -44,7 +44,8 @@ def up(): #DA FINIRE
             make_out = str(subprocess.check_output('make'), 'utf-8')
             #print(make_out, end='[')
             print('Make process end correctly.\nStart installation..')
-            install_out = str(subprocess.check_output(['sudo', 'make', 'install']), 'utf-8') #verificare se chiama sudo o se bisogna usare un metodo particolare
+            install_out = str(subprocess.check_output(['sudo', 'make', 'install']), 'utf-8')
+            #verificare se chiama sudo o se bisogna usare un metodo particolare
             print('Everything done, BE::Shell is now up to date')
     else:
         print('Project directory not found')
