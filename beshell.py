@@ -29,11 +29,12 @@ import git
 #import custom module(s)
 import check
 
-project_dir = os.path.expanduser('~/project/be-shell')
+project_dir = os.path.expanduser('~/project/be-shell/')
 g = git.cmd.Git(project_dir)
 
-def up(): #DA FINIRE
+def up():
     if check.dir(project_dir):
+        os.chdir(project_dir)
         ctrl_seq = 'Already up-to-date.'
         git_out = g.pull()
 
@@ -43,11 +44,19 @@ def up(): #DA FINIRE
             make_out = subprocess.check_call('make')
             print('Make process end correctly.\nStart installation..')
             install_out = subprocess.check_call(['sudo', 'make', 'install'])
-            print('Everything done, BE::Shell is now up to date')
-    else:
-        print('Project directory not found')
+            print('Everything done, BE::Shell is now up to date.')
 
-#def install(): #DA CREARE
+def install():
+    if check.dir(project_dir):
+        os.chdir(project_dir)
+        print('Configuring the system, please wait..')
+        configure_out = subprocess.check_call('./configure')
+        os.chdir('build')
+        print('Running make, please wait..')
+        make_out = subprocess.check_call('make')
+        print('Make process end correctly.\nStart installation..')
+        install_out = subprocess.check_call(['sudo', 'make', 'install'])
+        print('Everything done, BE::Shell is now installed.\nIf you want to start it run "kquitapp plasmashell; sleep 2; be.shell"')
 
 def theme():
     if os.path.isdir(os.path.expanduser('~/.kde4')):
