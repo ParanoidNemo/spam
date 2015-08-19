@@ -35,7 +35,7 @@ def dir(self):      #check if a dir exists into the given path
     else:
         print('Directory not found, do you want to create it? [yes/no]')
         if input() == 'yes':
-            os.makedirs(self)
+            os.makedirs(os.path.abspath(os.path.expanduser(self)))
             print('Created directory ' + self)
             return True
         else:
