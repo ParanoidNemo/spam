@@ -23,10 +23,17 @@ import shutil
 
 #import custom module(s)
 import check
+import beshell
 
-def compress(self='new_archive', extension='.tar', location, path=os.path.expanduser('~/.local/share/be.shell/backup/')):
-    check.dir(path)
-    if os.path.exists(os.path.join(location, extension, self)):
-        print('Already exists ' + self + extension + 'in' + os.path.expanduser(location))
+def compress(_path, location, name='new_archive', extension='tar'):
+    check.dir(_path)
+    check.dir(location)
+    c_name = name + '.' + extension
+    if os.path.exists(os.path.join(os.path.expanduser(location), c_name)):
+        print(c_name + ' already exists in ' + os.path.expanduser(location))
     else:
-        shutil.make_archive(self, extension, path)
+        os.chdir(os.path.expanduser(location))
+        shutil.make_archive(name, extension, base_dir=os.path.expanduser(_path))
+
+if __name__ == '__main__':
+    compress('~/.kde4/share/apps/be.shell/Themes/Hydrogen/', '~/.local/share/be.shell/backup/')
