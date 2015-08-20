@@ -21,7 +21,6 @@
 import os, sys
 import os.path
 import subprocess
-import getpass
 
 #import downloaded module(s)
 import git
@@ -34,6 +33,19 @@ beshell_dir = os.path.expanduser(project_dir + 'be-shell/')
 g = git.cmd.Git(beshell_dir)
 
 def up():
+"""Check if your locale installation of BE::Shell is updated.
+To do so use the default project directory define above as
+beshell_dir. If there are some updates it sync the git repo
+and start the compilation process. After that start the installation
+process (it obviusly require root access so you need sudo to
+complete that)
+
+e.g.
+>>> beshell.up()
+Running make, please wait..
+...
+Everything done, BE::Shell is now up to date.
+"""
     if check.dir(beshell_dir):
         ctrl_seq = 'Already up-to-date.'
         git_out = g.pull()
@@ -49,6 +61,13 @@ def up():
             print(git_out)  #check if needed when I've connection
 
 def install():
+"""Same as up() above. Before start the make process clone the repo and
+run configure to check the dependencies. Right now doesn't resolve it,
+just print error if someone missing.
+
+e.g.
+>>> beshell.install()
+"""
     if check.dir(project_dir):
         os.chdir(project_dir)
         print('Cloning package(s) from remote repo..')
@@ -63,19 +82,27 @@ def install():
         print('Everything done, BE::Shell is now installed.\nIf you want to start it run "kquitapp plasmashell; sleep 2; be.shell"')
 
 def config_dir():
+"""Check the system to find where be.shell theme and configs are located,
+following the default path (~/.kde or ~/.kde4).
+
+Return a dict that contain three keys (config, theme, file) associated
+with the abs path for the choosen keys.
+"""
     if os.path.isdir(os.path.expanduser('~/.kde4')):
-        cfg_dir = os.path.expanduser('~/.kde4/share/config/')
+        cfg_dir = os.path.expanduser('~/.kde4/share/config')
         be_dir = os.path.expanduser('~/.kde4/share/apps/be.shell/')
+        cfg_file = os.path.join(cfg_dir, 'be.shell')
     else:
-        cfg_dir = os.path.expanduser('~/.kde/share/config/')
+        cfg_dir = os.path.expanduser('~/.kde/share/config')
         be_dir = os.path.expanduser('~/.kde/share/apps/be.shell/')
-    return({'config': cfg_dir, 'theme': be_dir})
+        cfg_file = os.path.join(cgf_dir, 'be.shell')
+    return({'config': cfg_dir, 'theme': be_dir, 'file': cfg_file})
 
 def theme():
-    cfg = open(config_dir()['config'] + 'be.shell')
+    cfg = open(os.path.join(config_dir()['config'], 'be.shell'))
     for line in cfg:
         l = cfg.readline()
         if l.startswith('Theme'):
             theme_name = l[6:-1]
             theme_dir = config_dir()['theme'] + 'Themes/' + l[6:-1]
-    return({'dir': theme_dir, 'name': theme_name, 'config': cfg})
+    return({'dir': theme_dir, 'name': theme_name})
