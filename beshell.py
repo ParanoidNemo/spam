@@ -72,10 +72,10 @@ def config_dir():
     return({'config': cfg_dir, 'theme': be_dir})
 
 def theme():
-    global cfg = open(config_dir()['config'] + 'be.shell')
+    cfg = open(config_dir()['config'] + 'be.shell')
     for line in cfg:
         l = cfg.readline()
         if l.startswith('Theme'):
             theme_name = l[6:-1]
             theme_dir = config_dir()['theme'] + 'Themes/' + l[6:-1]
-    return({'dir': theme_dir, 'name': theme_name})
+    return({'dir': theme_dir, 'name': theme_name, 'config': cfg})
