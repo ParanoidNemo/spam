@@ -26,7 +26,7 @@ import check
 import beshell
 
 def compress(_path, location, name='new_archive', extension='tar'):
-    check.dir(_path)
+    #check.dir(_path)
     check.dir(location)
     c_name = name + '.' + extension
     if os.path.exists(os.path.join(os.path.expanduser(location), c_name)):
