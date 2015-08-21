@@ -33,19 +33,6 @@ beshell_dir = os.path.expanduser(project_dir + 'be-shell/')
 g = git.cmd.Git(beshell_dir)
 
 def up():
-"""Check if your locale installation of BE::Shell is updated.
-To do so use the default project directory define above as
-beshell_dir. If there are some updates it sync the git repo
-and start the compilation process. After that start the installation
-process (it obviusly require root access so you need sudo to
-complete that)
-
-e.g.
->>> beshell.up()
-Running make, please wait..
-...
-Everything done, BE::Shell is now up to date.
-"""
     if check.dir(beshell_dir):
         ctrl_seq = 'Already up-to-date.'
         git_out = g.pull()
@@ -60,14 +47,20 @@ Everything done, BE::Shell is now up to date.
         else:
             print(git_out)  #check if needed when I've connection
 
-def install():
-"""Same as up() above. Before start the make process clone the repo and
-run configure to check the dependencies. Right now doesn't resolve it,
-just print error if someone missing.
+"""Check if your locale installation of BE::Shell is updated.
+To do so use the default project directory define above as
+beshell_dir. If there are some updates it sync the git repo
+and start the compilation process. After that start the installation
+process (it obviusly require root access so you need sudo to
+complete that)
 
 e.g.
->>> beshell.install()
-"""
+>>> beshell.up()
+Running make, please wait..
+...
+Everything done, BE::Shell is now up to date."""
+
+def install():
     if check.dir(project_dir):
         os.chdir(project_dir)
         print('Cloning package(s) from remote repo..')
@@ -81,13 +74,14 @@ e.g.
         install_out = subprocess.check_call(['sudo', 'make', 'install'])
         print('Everything done, BE::Shell is now installed.\nIf you want to start it run "kquitapp plasmashell; sleep 2; be.shell"')
 
-def config_dir():
-"""Check the system to find where be.shell theme and configs are located,
-following the default path (~/.kde or ~/.kde4).
+"""Same as up() above. Before start the make process clone the repo and
+run configure to check the dependencies. Right now doesn't resolve it,
+just print error if someone missing.
 
-Return a dict that contain three keys (config, theme, file) associated
-with the abs path for the choosen keys.
-"""
+e.g.
+>>> beshell.install()"""
+
+def config_dir():
     if os.path.isdir(os.path.expanduser('~/.kde4')):
         cfg_dir = os.path.expanduser('~/.kde4/share/config')
         be_dir = os.path.expanduser('~/.kde4/share/apps/be.shell/')
@@ -98,6 +92,17 @@ with the abs path for the choosen keys.
         cfg_file = os.path.join(cgf_dir, 'be.shell')
     return({'config': cfg_dir, 'theme': be_dir, 'file': cfg_file})
 
+"""Check the system to find where be.shell theme and configs are located,
+following the default path (~/.kde or ~/.kde4).
+
+Return a dict that contain three keys (config, theme, file) associated
+with the abs path for the choosen keys file (configuration dir, theme dir,
+be.shell main config file)
+
+e.g
+>>> beshell.config_dir()
+{'config': '/home/nemo/.kde4/share/config', 'theme': '/home/nemo/.kde4/share/apps/be.shell/', 'file': '/home/nemo/.kde4/share/config/be.shell'}"""
+
 def theme():
     cfg = open(os.path.join(config_dir()['config'], 'be.shell'))
     for line in cfg:
@@ -106,3 +111,12 @@ def theme():
             theme_name = l[6:-1]
             theme_dir = config_dir()['theme'] + 'Themes/' + l[6:-1]
     return({'dir': theme_dir, 'name': theme_name})
+
+"""Check the actual theme and theme directory applied to BE::Shell.
+
+Return a dict that contain two keys (dir, name) associated
+with the abs path for the choosen keys file (theme dir, theme name)
+
+e.g
+>>> beshell.config_dir()
+{'dir': '/home/nemo/.kde4/share/apps/be.shell/Themes/Hydrogen', 'name': 'Hydrogen'}"""
