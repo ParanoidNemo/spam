@@ -24,6 +24,7 @@ import os.path
 #import web module(s)
 import mpd
 from mpd import MPDClient
+from PIL import Image
 
 #initialize client
 mpd_client = mpd.MPDClient()
@@ -75,4 +76,10 @@ def playlist():
             title = song['title']
         print(song['id'] if len(song['id']) is not 1 else '0' + song(['id']), '-', title, song['artist'])
 
-#def cover():
+#retrive cover image(s)
+def cover():
+    im = Image.open('/home/nemo/.local/share/be.shell/blank.jpg') #aggiungere l'output di cover finder
+    re_im = im.resize((400, 400))   #resize the image
+    box = (0, 200, 400, 400)        #choose the dimensions of the crop image
+    region = re_im.crop(box)        #crop the image with box dimensions
+    region.show()                   #show image in preview window
