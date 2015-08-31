@@ -17,6 +17,34 @@
 #   Free Software Foundation, Inc.,
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+"""This module define a set of functions to check and control the status of
+beshell and it's abs path. In order to work it depends to 2 (two) extra modules
+gitpython and check (the first one you could install using pip, the second one
+it's only avaible on the same github repo that you have used to download this
+module.)
+
+Global functins defined:
+- beshell.up: check if there are any update avaiable and install it
+- beshell.install: download, compile and install BE::Shell on your system
+
+Classes releated functions:
+
+Class beshell.Configuration:
+define a set of function to check the abs path of your actual configuration file
+and directory
+    - Configuration.config_dir: return the configuration dir abs path
+    - Configuration.main_file: return the be.shell main file abs path
+    - Configuration.main_dir: return the directory you are using to store
+    installed themes, scripts and other usefull stuff
+
+Class beshell.Theme:
+define two function that return the theme name you are using and the abs path
+to that theme
+    - Theme.name: return the theme name
+    - Theme.path: return the abs path of the theme in use
+
+For more in depth usage and example check the docstring contained in the functions"""
+
 #import std module(s)
 import os, sys
 import subprocess
@@ -37,6 +65,11 @@ else:
     default = os.path.expanduser('~/.kde')
 
 def up():
+
+    """This function check the status of the installation of BE::Shell on your
+    system, compare it with the actual status on the github repo and if there
+    are some changes download and install the new version"""
+
     if check.dir(beshell_dir):
         ctrl_seq = 'Already up-to-date.'
         git_out = g.pull()
@@ -82,6 +115,13 @@ class Configuration:
 class Theme():
 
     def name():
+
+        """(str) Return the name of the theme actually used.
+
+        e.g.
+        >>> beshell.Theme.name()
+        'Hydrogen'"""
+
         cfg = open(os.path.join(Configuration.config_dir(), 'be.shell'))
         for line in cfg:
             l = cfg.readline()
@@ -90,6 +130,13 @@ class Theme():
         return(outstring)
 
     def path():
+
+        """(str) Return the absolut path of the theme in use.
+
+        e.g.
+        >>> beshell.Theme.path()
+        '/home/nemo/.kde4/share/apps/be.shell/Themes/Hydrogen'"""
+
         cfg = open(os.path.join(Configuration.config_dir(), 'be.shell'))
         for line in cfg:
             l = cfg.readline()
