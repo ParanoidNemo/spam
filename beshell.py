@@ -80,17 +80,31 @@ just print error if someone missing.
 
 e.g.
 >>> beshell.install()"""
+class Configuration:
 
-def config_dir():
-    if os.path.isdir(os.path.expanduser('~/.kde4')):
-        cfg_dir = os.path.expanduser('~/.kde4/share/config')
-        be_dir = os.path.expanduser('~/.kde4/share/apps/be.shell/')
+    def __init__(self):
+        self.default = os.path.expanduser('~/.kde4')
+
+    def default_path():
+        if os.path.isdir(os.path.expanduser('~/.kde4')):
+            default = os.path.expanduser('~/.kde4')
+        else:
+            default = os.path.expanduser('~/.kde')
+        return(default)
+
+    def config_dir():
+        cfg_dir = '/home/nemo/.kde4/share/config'
+        #main_dir = os.path.join(self.default, 'share/apps/be.shell')
+        #cfg_file = os.path.join(cfg_dir, 'be.shell')
+        return(cfg_dir)
+
+    def main_file():
         cfg_file = os.path.join(cfg_dir, 'be.shell')
-    else:
-        cfg_dir = os.path.expanduser('~/.kde/share/config')
-        be_dir = os.path.expanduser('~/.kde/share/apps/be.shell/')
-        cfg_file = os.path.join(cgf_dir, 'be.shell')
-    return({'config': cfg_dir, 'theme': be_dir, 'file': cfg_file})
+        return(cfg_file)
+
+    def main_dir():
+        main_dir = os.path.join(default, 'share/apps/be.shell')
+        return(main_dir)
 
 """Check the system to find where be.shell theme and configs are located,
 following the default path (~/.kde or ~/.kde4).
@@ -103,14 +117,24 @@ e.g
 >>> beshell.config_dir()
 {'config': '/home/nemo/.kde4/share/config', 'theme': '/home/nemo/.kde4/share/apps/be.shell/', 'file': '/home/nemo/.kde4/share/config/be.shell'}"""
 
-def theme():
-    cfg = open(os.path.join(config_dir()['config'], 'be.shell'))
-    for line in cfg:
-        l = cfg.readline()
-        if l.startswith('Theme'):
-            theme_name = l[6:-1]
-            theme_dir = config_dir()['theme'] + 'Themes/' + l[6:-1]
-    return({'dir': theme_dir, 'name': theme_name})
+class Theme:
+
+    config_dir = Configuration.config_dir()
+    def name():
+        cfg = open(os.path.join(config_dir, 'be.shell'))
+        for line in cfg:
+            l = cfg.readline()
+            if l.startswith('Theme'):
+                outstring = l[6:-1]
+        return(outstring)
+
+    def path():
+        cfg = open(os.path.join(config_dir, 'be.shell'))
+        for line in cfg:
+            l = cfg.readline()
+            if l.startswith('Theme'):
+                outstring = os.path.join(config_dir, 'Themes', l[6:-1])
+        return(outstring)
 
 """Check the actual theme and theme directory applied to BE::Shell.
 
