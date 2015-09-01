@@ -22,16 +22,15 @@ import os, sys, io
 import os.path
 
 #import web module(s)
-import mpd
 from mpd import MPDClient
 from PIL import Image
 
 #initialize client
-mpd_client = mpd.MPDClient()
-mpd_client.timeout = 10
-mpd_client.idletimeout = None
-mpd_client.connect('localhost', 6600)
-mpd_status = mpd_client.status()['state']
+client = MPDClient()
+client.timeout = 10
+client.idletimeout = None
+client.connect('localhost', 6600)
+status = client.status()['state']
 
 #retrive mpd info
 def state():
@@ -59,12 +58,11 @@ def option():
     mpd_repeat = mpd_client.status()['repeat']
     mpd_consume = mpd_client.status()['consume']
 
-
 #retriving playlist info
 def playlist():
-    mpd_client.iterate = True
-    for song in mpd_client.playlistinfo():
-        if not len(song['pos']) == 1:
+    client.iterate = True
+    for song in client.playlistinfo():
+        if len(song['pos']) == 1:
             pos_val = int(song['pos']) + 1
             pos = str('0' + str(pos_val))
         else:
@@ -74,12 +72,16 @@ def playlist():
             title = str(song['title'])[:28] + '..'
         else:
             title = song['title']
-        print(song['id'] if len(song['id']) is not 1 else '0' + song(['id']), '-', title, song['artist'])
+        print(pos, '-', title, song['artist'])
 
 #retrive cover image(s)
+#def cover_finder():
+
 def cover():
     im = Image.open('/home/nemo/.local/share/be.shell/blank.jpg') #aggiungere l'output di cover finder
     re_im = im.resize((400, 400))   #resize the image
-    box = (0, 200, 400, 400)        #choose the dimensions of the crop image
-    region = re_im.crop(box)        #crop the image with box dimensions
-    region.show()                   #show image in preview window
+    cover_im = re_im
+    return(cover_im)
+    #box = (0, 200, 400, 400)        #choose the dimensions of the crop image
+    #region = re_im.crop(box)        #crop the image with box dimensions
+    #region.show()                   #show image in preview window
