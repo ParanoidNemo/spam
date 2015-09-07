@@ -22,17 +22,18 @@ import os, sys
 import shutil
 
 #import custom module(s)
-import check
 import beshell
 
 def compress(_path, location, name='new_archive', extension='tar'):
-    check.dir(location)
-    c_name = name + '.' + extension
-    if os.path.exists(os.path.join(os.path.expanduser(location), c_name)):
-        print(c_name + ' already exists in ' + os.path.expanduser(location))
+    while not os.path.isdir(os.path.expanduser(location)):
+        os.makedirs(os.path.expanduser(location))
     else:
-        os.chdir(os.path.expanduser(location))
-        shutil.make_archive(name, extension, base_dir=os.path.expanduser(_path))
+        c_name = name + '.' + extension
+        if os.path.exists(os.path.join(os.path.expanduser(location), c_name)):
+            print(c_name + ' already exists in ' + os.path.expanduser(location))
+        else:
+            os.chdir(os.path.expanduser(location))
+            shutil.make_archive(name, extension, base_dir=os.path.expanduser(_path))
 
 if __name__ == '__main__':
     compress()
