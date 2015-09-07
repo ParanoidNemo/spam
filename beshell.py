@@ -52,9 +52,6 @@ import subprocess
 #import downloaded module(s)
 import git
 
-#import custom module(s)
-import check
-
 project_dir = os.path.expanduser('~/project')
 beshell_dir = os.path.join(project_dir, 'be-shell')
 g = git.cmd.Git(beshell_dir)
@@ -70,7 +67,7 @@ def up():
     system, compare it with the actual status on the github repo and if there
     are some changes download and install the new version"""
 
-    if check.dir(beshell_dir):
+    if os.path.isdir(beshell_dir):
         ctrl_seq = 'Already up-to-date.'
         git_out = g.pull()
 
@@ -82,14 +79,17 @@ def up():
             install_out = subprocess.check_call(['sudo', 'make', 'install'])
             print('Everything done, BE::Shell is now up to date.')
         else:
-            print(git_out)  #check if needed when I've connection
+            print(git_out)
 
 def install():
     remote = 'git://git.code.sf.net/p/be-shell/code'
-    if check.dir(project_dir):
+    while not os.path.isdir(project_dir):
+        os.makedirs(project_dir)
+    else:
         os.chdir(project_dir)
         print('Cloning package(s) from remote repo..')
         clone_out = g.clone(remote, 'be-shell')
+        os.chdir(project_dir)
         print('Configuring the system..')
         configure_out = subprocess.check_call('./configure')
         os.chdir('build')
