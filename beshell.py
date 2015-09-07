@@ -106,7 +106,7 @@ class Configuration:
         return(cfg_dir)
 
     def main_file():
-        cfg_file = os.path.join(cfg_dir, 'be.shell')
+        cfg_file = os.path.join(Configuration.config_dir(), 'be.shell')
         return(cfg_file)
 
     def main_dir():
@@ -142,5 +142,5 @@ class Theme():
         for line in cfg:
             l = cfg.readline()
             if l.startswith('Theme'):
-                outstring = os.path.join(Configuration.config_dir(), 'Themes', l[6:-1])
+                outstring = os.path.join(Configuration.main_dir(), 'Themes', l[6:-1])
         return(outstring)
