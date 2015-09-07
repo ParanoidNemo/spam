@@ -35,4 +35,4 @@ def compress(_path, location, name='new_archive', extension='tar'):
         shutil.make_archive(name, extension, base_dir=os.path.expanduser(_path))
 
 if __name__ == '__main__':
-    compress('~/.kde4/share/apps/be.shell/Themes/Hydrogen/', '~/.local/share/be.shell/backup/')
+    compress()

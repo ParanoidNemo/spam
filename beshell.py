@@ -55,8 +55,8 @@ import git
 #import custom module(s)
 import check
 
-project_dir = os.path.expanduser('~/project/')
-beshell_dir = os.path.expanduser(project_dir + 'be-shell/')
+project_dir = os.path.expanduser('~/project')
+beshell_dir = os.path.join(project_dir, 'be-shell')
 g = git.cmd.Git(beshell_dir)
 
 if os.path.isdir(os.path.expanduser('~/.kde4')):
@@ -75,7 +75,7 @@ def up():
         git_out = g.pull()
 
         if git_out != ctrl_seq:
-            os.chdir(beshell_dir + 'build')
+            os.chdir(os.path.join(beshell_dir, 'build'))
             print('Running make, please wait..')
             make_out = subprocess.check_call('make')
             print('Make process end correctly.\nStart installation..')
@@ -85,10 +85,11 @@ def up():
             print(git_out)  #check if needed when I've connection
 
 def install():
+    remote = 'git://git.code.sf.net/p/be-shell/code'
     if check.dir(project_dir):
         os.chdir(project_dir)
         print('Cloning package(s) from remote repo..')
-        clone_out = g.clone(indirizzo, 'be-shell')       #search how to clone a remote repo
+        clone_out = g.clone(remote, 'be-shell')
         print('Configuring the system..')
         configure_out = subprocess.check_call('./configure')
         os.chdir('build')
