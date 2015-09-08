@@ -42,6 +42,8 @@ define two function that return the theme name you are using and the abs path
 to that theme
     - Theme.name: return the theme name
     - Theme.path: return the abs path of the theme in use
+    - Theme.l_list: return a list of installed beshell themes
+    - Theme.d_list: return a list of downloaded themes
 
 For more in depth usage and example check the docstring contained in the functions"""
 
