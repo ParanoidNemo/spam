@@ -144,3 +144,23 @@ class Theme():
             if l.startswith('Theme'):
                 outstring = os.path.join(Configuration.main_dir(), 'Themes', l[6:-1])
         return(outstring)
+
+    def l_list():
+
+        """(lst) Return a list of locally installed themes"""
+
+        theme_dir = os.path.join(Configuration.main_dir(), 'Themes')
+        for line in os.listdir(theme_dir):
+            t = line
+            if not t.startswith('.'):
+                print(t)
+
+    def d_list():
+
+        """(lst) Return a list of locally downloaded themes"""
+
+        theme_dir = os.path.join(project_dir, 'Bedevil', 'be.shell', 'Themes')
+        for line in os.listdir(theme_dir):
+            t = line
+            if not t.startswith('.'):
+                print(t)
