@@ -52,9 +52,13 @@ import subprocess
 #import downloaded module(s)
 import git
 
+global project_dir
+global beshell_dir
+
 project_dir = os.path.expanduser('~/project')
 beshell_dir = os.path.join(project_dir, 'be-shell')
 g = git.cmd.Git(beshell_dir)
+g2 = git.cmd.Git(project_dir)
 
 if os.path.isdir(os.path.expanduser('~/.kde4')):
     default = os.path.expanduser('~/.kde4')
@@ -69,7 +73,7 @@ def up():
 
     if os.path.isdir(beshell_dir):
         ctrl_seq = 'Already up-to-date.'
-        git_out = g.pull()
+        git_out = g.pull()any
 
         if git_out != ctrl_seq:
             os.chdir(os.path.join(beshell_dir, 'build'))
@@ -88,7 +92,7 @@ def install():
     else:
         os.chdir(project_dir)
         print('Cloning package(s) from remote repo..')
-        clone_out = g.clone(remote, 'be-shell')
+        clone_out = g2.clone(remote, 'be-shell')
         os.chdir(project_dir)
         print('Configuring the system..')
         configure_out = subprocess.check_call('./configure')
