@@ -166,7 +166,7 @@ class Theme():
         """(lst) Return a list of locally downloaded themes"""
 
         try:
-            theme_dir = os.path.join(project_dir, 'Bedevil', 'be.she.ll', 'Themes')
+            theme_dir = os.path.join(project_dir, 'Bedevil', 'be.shell', 'Themes')
             for line in os.listdir(theme_dir):
                 t = line
                 if not t.startswith('.'):
