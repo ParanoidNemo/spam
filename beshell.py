@@ -119,7 +119,7 @@ class Configuration:
         main_dir = os.path.join(default, 'share/apps/be.shell')
         return(main_dir)
 
-class Theme():
+class Theme:
 
     def name():
 
@@ -129,11 +129,11 @@ class Theme():
         >>> beshell.Theme.name()
         'Hydrogen'"""
 
-        cfg = open(os.path.join(Configuration.config_dir(), 'be.shell'))
+        cfg = open(Configuration.main_file())
+        cfg.seek(0, 0)
         for line in cfg:
-            l = cfg.readline()
-            if l.startswith('Theme'):
-                outstring = l[6:-1]
+            if line.startswith('Theme'):
+                outstring = line[6:-1]
         return(outstring)
 
     def path():
@@ -144,11 +144,11 @@ class Theme():
         >>> beshell.Theme.path()
         '/home/nemo/.kde4/share/apps/be.shell/Themes/Hydrogen'"""
 
-        cfg = open(os.path.join(Configuration.config_dir(), 'be.shell'))
+        cfg = open(Configuration.main_file())
+        cfg.seek(0, 0)
         for line in cfg:
-            l = cfg.readline()
-            if l.startswith('Theme'):
-                outstring = os.path.join(Configuration.main_dir(), 'Themes', l[6:-1])
+            if line.startswith('Theme'):
+                outstring = os.path.join(Configuration.main_dir(), 'Themes', line[6:-1])
         return(outstring)
 
     def l_list():
