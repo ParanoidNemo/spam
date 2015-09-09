@@ -75,7 +75,7 @@ def up():
 
     if os.path.isdir(beshell_dir):
         ctrl_seq = 'Already up-to-date.'
-        git_out = g.pull()any
+        git_out = g.pull()
 
         if git_out != ctrl_seq:
             os.chdir(os.path.join(beshell_dir, 'build'))
@@ -165,8 +165,11 @@ class Theme():
 
         """(lst) Return a list of locally downloaded themes"""
 
-        theme_dir = os.path.join(project_dir, 'Bedevil', 'be.shell', 'Themes')
-        for line in os.listdir(theme_dir):
-            t = line
-            if not t.startswith('.'):
-                print(t)
+        try:
+            theme_dir = os.path.join(project_dir, 'Bedevil', 'be.she.ll', 'Themes')
+            for line in os.listdir(theme_dir):
+                t = line
+                if not t.startswith('.'):
+                    print(t)
+        except FileNotFoundError as ex:
+            print(ex)
