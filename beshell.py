@@ -151,25 +151,41 @@ class Theme:
                 outstring = os.path.join(Configuration.main_dir(), 'Themes', line[6:-1])
         return(outstring)
 
-    def l_list():
+    def l_list(self):
 
         """(lst) Return a list of locally installed themes"""
 
         theme_dir = os.path.join(Configuration.main_dir(), 'Themes')
+        i = 0
+        d = {}
         for line in os.listdir(theme_dir):
             t = line
             if not t.startswith('.'):
-                print(t)
+                d[i] = t
+                i += 1
+        for index, item in enumerate(d.values()):
+            if self == 'list':
+                print(item)
+            elif self == 'dict':
+                print(index, '-->', item)
 
-    def d_list():
+    def d_list(self):
 
         """(lst) Return a list of locally downloaded themes"""
 
         try:
             theme_dir = os.path.join(project_dir, 'Bedevil', 'be.shell', 'Themes')
+            i = 0
+            d = {}
             for line in os.listdir(theme_dir):
                 t = line
                 if not t.startswith('.'):
-                    print(t)
+                    d[i] = t
+                    i += 1
+            for index, item in enumerate(d.values()):
+                if self == 'list':
+                    print(item)
+                elif self == 'dict':
+                    print(index, '-->', item)
         except FileNotFoundError as ex:
             print(ex)
