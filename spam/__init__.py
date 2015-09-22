@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#! /usr/bin/env python
 
 #   Copyright (C) 2015 by Andrea Calzavacca <paranoid.nemo@gmail.com>
 #
@@ -17,23 +17,9 @@
 #   Free Software Foundation, Inc.,
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#import std module(s)
-import os, sys
-import shutil
+# This file is an init file that make the whole directory spam a module
+# container. Please don't edit this file if you doesn't know what your
+# doing. The __all__ var make that all the module in spam could be
+# imported with 'from spam import *' flag
 
-#import custom module(s)
-import beshell
-
-def compress(_path, location, name='new_archive', extension='tar'):
-    while not os.path.isdir(os.path.expanduser(location)):
-        os.makedirs(os.path.expanduser(location))
-    else:
-        c_name = name + '.' + extension
-        if os.path.exists(os.path.join(os.path.expanduser(location), c_name)):
-            print(c_name + ' already exists in ' + os.path.expanduser(location))
-        else:
-            os.chdir(os.path.expanduser(location))
-            shutil.make_archive(name, extension, base_dir=os.path.expanduser(_path))
-
-if __name__ == '__main__':
-    compress()
+__all__ = ["archive", "beshell", "check"]
