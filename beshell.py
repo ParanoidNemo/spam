@@ -104,6 +104,24 @@ def install():
         print('Make process end correctly.\nStart installation..')
         install_out = subprocess.check_call(['sudo', 'make', 'install'])
         print('Everything done, BE::Shell is now installed.\nIf you want to start it run "kquitapp plasmashell; sleep 2; be.shell"')
+def backup():
+    bk_path = os.path.expanduser('~/.local/share/be.shell/backup')
+    try:
+        os.makedirs(bk_path)
+    except FileExistsError:
+        pass
+    except Exception as ex:
+        print(ex)
+    tmp_dir = tempfile.mkdtemp(dir=bk_path)
+    _tmp_dir = os.path.join(tmp_dir, Theme.name())
+    shutil.copytree(Theme.path(), _tmp_dir)
+    shutil.copy2(Configuration.main_file(), _tmp_dir)
+    os.chdir(bk_path)
+    for dirs in os.listdir(os.getcwd()):
+        _dir = dirs
+        archive.compress(_dir, bk_path, name=Theme.name())
+        shutil.rmtree(tmp_dir)
+    print('Everything done correctly. To restore your backup launch the script with the xxx flag')
 
 class Configuration:
 
@@ -130,7 +148,7 @@ class Theme:
         'Hydrogen'"""
 
         cfg = open(Configuration.main_file())
-        cfg.seek(0, 0)
+        cfg.seek(0, 0)  #to be sure, set the offset to the start of the file explicity
         for line in cfg:
             if line.startswith('Theme'):
                 outstring = line[6:-1]
@@ -151,7 +169,7 @@ class Theme:
                 outstring = os.path.join(Configuration.main_dir(), 'Themes', line[6:-1])
         return(outstring)
 
-    def l_list(self=''):
+    def list(self=''):
 
         """(lst) Return a list of locally installed themes"""
 
