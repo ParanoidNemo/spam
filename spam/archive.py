@@ -39,8 +39,8 @@ def extract(dst, location, name, extension='tar'):
 
     try:
         archive_name = os.path.join(os.path.expanduser(location), name + '.' + extension)
-        if os.path.isfile(os.path.expanduser(archive_name)):
-            #add how to extract
+        if os.path.isfile(archive_name):
+            os.chdir(os.path.expanduser(location))
             shutil.unpack_archive(archive_name, os.path.expanduser(dst), extension)
     except FileNotFoundError:
         print("File doesn't exists or is a dir")
