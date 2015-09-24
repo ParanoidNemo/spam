@@ -21,9 +21,6 @@
 import os, sys
 import shutil
 
-#import custom module(s)
-from spam import beshell
-
 def compress(_path, location, name='new_archive', extension='tar'):
     while not os.path.isdir(os.path.expanduser(location)):
         os.makedirs(os.path.expanduser(location))

@@ -104,6 +104,7 @@ def install():
         print('Make process end correctly.\nStart installation..')
         install_out = subprocess.check_call(['sudo', 'make', 'install'])
         print('Everything done, BE::Shell is now installed.\nIf you want to start it run "kquitapp plasmashell; sleep 2; be.shell"')
+        
 def backup():
     bk_path = os.path.expanduser('~/.local/share/be.shell/backup')
     try:
