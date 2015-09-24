@@ -17,30 +17,30 @@
 #   Free Software Foundation, Inc.,
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-import os.path
-import os
-import sys
+import os, sys
 import datetime
 
 #start def the function(s)
 def prg(self):      #check if an executable exists in /usr/bin/
+
     if os.path.exists('/usr/bin/' + self):
         return True
     else:
         return False
 
-def dir(self):      #check if a dir exists into the given path
-    if os.path.isdir(os.path.expanduser(self)):
-        return True
-    else:
-        print('Directory not found, do you want to create it? [yes/no]')
-        if input() == 'yes':
-            os.makedirs(os.path.abspath(os.path.expanduser(self)))
-            print('Created directory ' + self)
-            return True
-        else:
-            raise KeyboardInterrupt('Nothing to do')
-            sys.exit(1)
 
-#def date(self, mesure=days):     #check how much time as passed (default=days) between to given dates
-#    today = datetime.datetime.date(now)
+def date(timestamp):     #check how much time as passed (default=days) between to given dates
+
+    t = datetime.date.today()
+    date_code = t.toordinal()
+
+    with open(timestamp, 'r') as ts:
+        for line in ts:
+            if line.startswith('#'):
+                continue
+            elif line.startswith('last'):
+                odc = line[5:-2]
+                old_date_code = int(odc)
+
+    if date_code > old_date_code:
+        print(date_code - old_date_code)
