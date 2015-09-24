@@ -41,3 +41,5 @@ the last example is, right now, the suggested one because it'll import only the 
 
 # Working modules
 * beshell
+* check
+* archive
