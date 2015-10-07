@@ -22,21 +22,44 @@ import email
 import datetime
 
 def process_mailbox(mailbox):
+
     rv, data = mailbox.search(None, "unseen")
+
     if rv != 'OK':
         print("No messages found!")
 
+    info = []
+    _info = {}
     for num in data[0].split():
+
         rv, data = mailbox.fetch(num, '(RFC822)')
+
         if rv != 'OK':
             print("ERROR getting message", num)
             return
 
         msg = email.message_from_bytes(data[0][1])
         _num = num.decode("ASCII")
-        print('From:', msg['From'])
-        print('Message %s: %s' % (_num, msg['Subject']))
-        print('Raw Date:', msg['Date'], '\n')
+        _from = 'From' + msg['From']
+        _message = 'Message %s: %s' % (_num, msg['Subject'])
+        _date = 'Raw Date:' + msg['Date']
+
+#capire come implementare il format per singolo messaggio di ogni email e il
+#format generale dell'applet URLA STRAZIANTI!!!
+
+        info.append(_from)
+        info.append(_message)
+        info.append(_date)
+
+        for index, item in enumerate(info):
+            i = '{' + str(index) + '}'
+            _info[i] = item
+
+    return(_info)
+
+        #print('From:', msg['From'])
+        #print('Message %s: %s' % (_num, msg['Subject']))
+        #print('Raw Date:', msg['Date'], '\n')
         #date_tuple = email.utils.parsedate_tz(msg['Date'])
         #if date_tuple:
         #    local_date = datetime.datetime.fromtimestamp(email.utils.mktime_tz(date_tuple))
