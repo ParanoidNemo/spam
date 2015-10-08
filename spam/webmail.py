@@ -40,22 +40,21 @@ def process_mailbox(mailbox):
 
         msg = email.message_from_bytes(data[0][1])
         _num = num.decode("ASCII")
-        _from = 'From' + msg['From']
-        _message = 'Message %s: %s' % (_num, msg['Subject'])
-        _date = 'Raw Date:' + msg['Date']
+        _from = 'From:' + '</td>' + '<td>' + msg['From'] + '</td>' + '</tr>'
+        _message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + msg['Subject'] + '</td>' + '</tr>'
+        _date = '<tr>' + '<td>' + 'Raw Date:' + '</td>' + '<td>' + msg['Date']
+        _out = _from + _message + _date
 
 #capire come implementare il format per singolo messaggio di ogni email e il
 #format generale dell'applet URLA STRAZIANTI!!!
 
-        info.append(_from)
-        info.append(_message)
-        info.append(_date)
+        info.append(_out)
 
-        for index, item in enumerate(info):
-            i = '{' + str(index) + '}'
-            _info[i] = item
+        #for index, item in enumerate(info):
+        #    i = '{' + str(index) + '}'
+        #    _info[i] = item
 
-    return(_info)
+    return(info)
 
         #print('From:', msg['From'])
         #print('Message %s: %s' % (_num, msg['Subject']))
