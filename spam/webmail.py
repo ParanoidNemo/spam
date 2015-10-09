@@ -42,8 +42,13 @@ def process_mailbox(mailbox):
         _num = num.decode("ASCII")
         _from = 'From:' + '</td>' + '<td>' + msg['From'] + '</td>' + '</tr>'
 
+        if len(msg['Subject']) > 40:
+            sub = msg['Subject'][:37] + '...'
+        else:
+            sub = msg['Subject']
+
         try:
-            _message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + msg['Subject'] + '</td>' + '</tr>'
+            _message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + sub + '</td>' + '</tr>'
         except TypeError:
             _message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + '</td>' + '</tr>'
 
