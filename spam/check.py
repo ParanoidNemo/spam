@@ -44,3 +44,16 @@ def date(timestamp):     #check how much time as passed (default=days) between t
 
     if date_code > old_date_code:
         print(date_code - old_date_code)
+
+def distro():           #check the current distro installed on the system
+
+    if prg('aptitude'):
+        distro = 'debian'
+    elif prg('dnf'):
+        distro = 'fedora'
+    elif prg('pacman'):
+        distro = 'archlinux'
+    else:
+        distro = ''
+
+    return(distro)
