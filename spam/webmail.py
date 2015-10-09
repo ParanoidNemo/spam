@@ -41,7 +41,12 @@ def process_mailbox(mailbox):
         msg = email.message_from_bytes(data[0][1])
         _num = num.decode("ASCII")
         _from = 'From:' + '</td>' + '<td>' + msg['From'] + '</td>' + '</tr>'
-        _message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + msg['Subject'] + '</td>' + '</tr>'
+
+        try:
+            _message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + msg['Subject'] + '</td>' + '</tr>'
+        except TypeError:
+            _message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + '</td>' + '</tr>'
+
         _date = '<tr>' + '<td>' + 'Raw Date:' + '</td>' + '<td>' + msg['Date']
         _out = _from + _message + _date
 
@@ -50,16 +55,4 @@ def process_mailbox(mailbox):
 
         info.append(_out)
 
-        #for index, item in enumerate(info):
-        #    i = '{' + str(index) + '}'
-        #    _info[i] = item
-
     return(info)
-
-        #print('From:', msg['From'])
-        #print('Message %s: %s' % (_num, msg['Subject']))
-        #print('Raw Date:', msg['Date'], '\n')
-        #date_tuple = email.utils.parsedate_tz(msg['Date'])
-        #if date_tuple:
-        #    local_date = datetime.datetime.fromtimestamp(email.utils.mktime_tz(date_tuple))
-        #    print("Local Date:", local_date.strftime("%a, %d %b %Y %H:%M:%S"))
