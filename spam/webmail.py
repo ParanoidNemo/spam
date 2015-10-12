@@ -55,7 +55,6 @@ def process_mailbox(mailbox):
 
         msg = email.message_from_bytes(data[0][1])
         _num = num.decode("ASCII")
-        #_from = 'From:' + '</td>' + '<td>' + msg['From'] + '</td>' + '</tr>'
         _from = msg['From']
 
         if len(msg['Subject']) > 40:
@@ -64,13 +63,10 @@ def process_mailbox(mailbox):
             sub = msg['Subject']
 
         try:
-            #_message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + sub + '</td>' + '</tr>'
             _message = sub
         except TypeError:
-            #_message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + '</td>' + '</tr>'
             _message = ''
 
-        #_date = '<tr>' + '<td>' + 'Raw Date:' + '</td>' + '<td>' + msg['Date']
         _date = msg['Date']
 
         _out = [_from, _num, _message, _date]
@@ -80,9 +76,6 @@ def process_mailbox(mailbox):
             o[i] = item
 
         outstring = insert_data(format_string, o)
-
-#capire come implementare il format per singolo messaggio di ogni email e il
-#format generale dell'applet URLA STRAZIANTI!!!
 
         info.append(outstring)
 
