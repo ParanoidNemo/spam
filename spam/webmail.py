@@ -17,9 +17,25 @@
 #   Free Software Foundation, Inc.,
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+import os
+import re
 import imaplib
 import email
 import datetime
+
+def insert_data(string, rep_dict):
+    pattern = re.compile("|".join([re.escape(k) for k in rep_dict.keys()]), re.M)
+    return pattern.sub(lambda x: rep_dict[x.group(0)], string)
+
+format_string = ''
+with open(os.path.expanduser('~/.kde4/share/apps/be.shell/Themes/Hydrogen/twolame/single_mail.format')) as f:
+    for line in f:
+        if line.startswith('#'):
+            continue
+        format_string += line
+
+format_string = re.sub(r'>\s<', '><', format_string)
+format_string = re.sub(r'\n', '', format_string)
 
 def process_mailbox(mailbox):
 
@@ -29,7 +45,6 @@ def process_mailbox(mailbox):
         print("No messages found!")
 
     info = []
-    _info = {}
     for num in data[0].split():
 
         rv, data = mailbox.fetch(num, '(RFC822)')
@@ -40,7 +55,8 @@ def process_mailbox(mailbox):
 
         msg = email.message_from_bytes(data[0][1])
         _num = num.decode("ASCII")
-        _from = 'From:' + '</td>' + '<td>' + msg['From'] + '</td>' + '</tr>'
+        #_from = 'From:' + '</td>' + '<td>' + msg['From'] + '</td>' + '</tr>'
+        _from = msg['From']
 
         if len(msg['Subject']) > 40:
             sub = msg['Subject'][:37] + '...'
@@ -48,16 +64,26 @@ def process_mailbox(mailbox):
             sub = msg['Subject']
 
         try:
-            _message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + sub + '</td>' + '</tr>'
+            #_message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + sub + '</td>' + '</tr>'
+            _message = sub
         except TypeError:
-            _message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + '</td>' + '</tr>'
+            #_message = '<tr>' + '<td>' + 'Message %s:' %_num + '</td>' + '<td>' + '</td>' + '</tr>'
+            _message = ''
 
-        _date = '<tr>' + '<td>' + 'Raw Date:' + '</td>' + '<td>' + msg['Date']
-        _out = _from + _message + _date
+        #_date = '<tr>' + '<td>' + 'Raw Date:' + '</td>' + '<td>' + msg['Date']
+        _date = msg['Date']
+
+        _out = [_from, _num, _message, _date]
+        o = {}
+        for index, item in enumerate(_out):
+            i = '{' + str(index) + '}'
+            o[i] = item
+
+        outstring = insert_data(format_string, o)
 
 #capire come implementare il format per singolo messaggio di ogni email e il
 #format generale dell'applet URLA STRAZIANTI!!!
 
-        info.append(_out)
+        info.append(outstring)
 
     return(info)
