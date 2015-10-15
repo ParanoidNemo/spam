@@ -114,13 +114,31 @@ def playlist(client):
     return(playlist_info)
 
 #retrive cover image(s)
-#def cover_finder():
+def cover_finder(path, client):
 
-def cover():
-    im = Image.open('/home/nemo/.local/share/be.shell/blank.jpg') #aggiungere l'output di cover finder
-    re_im = im.resize((400, 400))   #resize the image
-    cover_im = re_im
-    return(cover_im)
+    path = os.path.expanduser(path)
+    default_image = os.path.join(beshell.Theme.path(), 'twolame', 'blank.jpg')
+
+    if os.path.exists(path):
+        try:
+            im = os.path.join(path, process_mpd(client)[5], process_mpd(client)[7], 'cover.jpg')
+        except FileNotFoundError:
+            im = default_image
+    else:
+        im = default_image
+
+    return(im)
+
+def cover(path, client):
+
+    cover = {}
+    im = cover_finder(path, client)
+
+    #re_im = im.resize((400, 400))   #resize the image
+
+    cover['{cover}'] = im
+    return(cover)
+
     #box = (0, 200, 400, 400)        #choose the dimensions of the crop image
     #region = re_im.crop(box)        #crop the image with box dimensions
     #region.show()                   #show image in preview window
