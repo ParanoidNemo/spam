@@ -135,11 +135,5 @@ def cover(path, client):
     cover = {}
     im = cover_finder(path, client)
 
-    #re_im = im.resize((400, 400))   #resize the image
-
     cover['{cover}'] = im
     return(cover)
-
-    #box = (0, 200, 400, 400)        #choose the dimensions of the crop image
-    #region = re_im.crop(box)        #crop the image with box dimensions
-    #region.show()                   #show image in preview window
