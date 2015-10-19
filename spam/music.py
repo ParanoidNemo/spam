@@ -87,8 +87,9 @@ def playlist(client):
     for song in client.playlistinfo():
 
         pos_val = int(song['pos']) + 1
+        _pos_val = str(pos_val)
 
-        if len(song['pos']) == 1:
+        if len(_pos_val) == 1:
             pos = str('0' + str(pos_val))
         else:
             pos = str(pos_val)
