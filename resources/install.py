@@ -23,10 +23,10 @@ import os, sys, shutil, subprocess
 v = 'python' + sys.version[:3]
 _v = float(sys.version[:3])
 if _v < 3.4:
-    print('Spam need python3.4 or higher')
+    print('Spam need python 3.4 or higher')
 
 #check if spam exists in your config_dir
-f = os.path.join('/usr/lib', v, 'site-packages/spam.pth')
+f = os.path.join('/usr/lib', v, 'site-packages', 'spam.pth')
 
 try:
     if os.path.isfile(f):
