@@ -41,7 +41,7 @@ the last example is, right now, the suggested one because it'll import only the 
 
 # Working modules
 * [beshell](https://github.com/ParanoidNemo/spam/wiki/beshell)
-* check
+* [check](https://github.com/ParanoidNemo/spam/wiki/check)
 * archive
 * fs
 * music
