@@ -11,7 +11,7 @@ Right now I've no plan to port it on python2 too.
 
 Dependencies:
 * gitpython   (for beshell module)
-* python-mpd2 (for music module)
+* musicpd (for music module)
 
 ## Installation
 
@@ -43,3 +43,6 @@ the last example is, right now, the suggested one because it'll import only the 
 * [beshell](https://github.com/ParanoidNemo/spam/wiki/beshell)
 * check
 * archive
+* fs
+* music
+* webmail
