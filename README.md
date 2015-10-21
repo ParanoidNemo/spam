@@ -45,4 +45,4 @@ the last example is, right now, the suggested one because it'll import only the 
 * archive
 * fs
 * music
-* webmail
+* [webmail](https://github.com/ParanoidNemo/spam/wiki/webmail)
