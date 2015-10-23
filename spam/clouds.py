@@ -21,9 +21,9 @@ import os, sys, re
 import subprocess
 
 
-class Dropbox():
+class Rclone():
 
-    def space_info(remote):
+    def space_info(remote, service):
 
         cloud_storage = remote + ':'
 
@@ -41,10 +41,18 @@ class Dropbox():
             l.append(item)
 
         used_space = l[2][:-1]
-        total_space = float(20)
+
+        if service == 'dropbox':
+            total_space = float(20)
+        elif service == 'drive':
+            total_space = float(15)
+        else:
+            print("Service not found")
+            sys.exit(1)
+
         free_space = total_space - float(used_space)
 
-        out = [str(total_space), str(free_space), used_space]
+        out = [str(total_space), str(free_space), used_space, service]
 
         return(out)
 
@@ -71,5 +79,7 @@ class Mega():
             for line in line.split(sep='\n'):
                 if line.isdigit():
                     out.append(line)
+
+        out.append('mega')
 
         return(out)
