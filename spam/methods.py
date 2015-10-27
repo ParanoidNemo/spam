@@ -17,3 +17,18 @@ def create_dict(rep_list):
         rep_dict[i] = item
 
     return(rep_dict)
+
+def format(format_file):
+
+    format_string = ''
+
+    with open(os.path.expanduser(format_file)) as f:
+        for line in f:
+            if line.startswith('#'):
+                continue
+            format_string += line
+
+    format_string = re.sub(r'>\s<', '><', format_string)
+    format_string = re.sub(r'\n', '', format_string)
+
+    return(format_string)
