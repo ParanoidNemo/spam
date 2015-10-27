@@ -18,7 +18,7 @@ def create_dict(rep_list):
 
     return(rep_dict)
 
-def format(format_file):
+def format_string(format_file):
 
     format_string = ''
 
