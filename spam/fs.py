@@ -17,13 +17,22 @@
 #   Free Software Foundation, Inc.,
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+"""This module define a function that retrive space info for a choosen mountpoint.
+
+Global functions defined:
+    - fs_info: retrive info for a choosen mountpoint
+
+For more in depth usage and example check the docstring contained in the functions"""
+
 import os, sys
 
 def fs_info(mountpoint):
 
+    """(dict) return a dict containig space info for every choosen mount point"""
+
     stat = os.statvfs(os.path.expanduser(mountpoint))
     free = "{0:.2f}".format(stat.f_bavail * stat.f_frsize / 1000000000)    # results in Gb (free space)
-    tot = "{0:.2f}".format(stat.f_frsize * stat.f_blocks / 1000000000)       # results in Gb (total space)
+    tot = "{0:.2f}".format(stat.f_frsize * stat.f_blocks / 1000000000)     # results in Gb (total space)
     used = "{0:.2f}".format(float(tot) - float(free))
 
     pfree = 100 * float(free) // float(tot)
