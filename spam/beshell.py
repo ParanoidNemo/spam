@@ -127,47 +127,59 @@ def install():
         print('Everything done, BE::Shell is now installed.\nIf you want to start it run "kquitapp plasmashell; sleep 2; be.shell"')
 
 def backup():
+
     bk_path = os.path.expanduser('~/.local/share/be.shell/backup')
+
     try:
         os.makedirs(bk_path)
     except FileExistsError:
         pass
     except Exception as ex:
         print(ex)
+
     tmp_dir = tempfile.mkdtemp(dir=bk_path)
     _tmp_dir = os.path.join(tmp_dir, Theme.name())
+
     shutil.copytree(Theme.path(), _tmp_dir)
     shutil.copy2(Configuration.main_file(), _tmp_dir)
+
     os.chdir(bk_path)
+
     for dirs in os.listdir(os.getcwd()):
         _dir = dirs
         archive.compress(_dir, bk_path, name=Theme.name())
         shutil.rmtree(tmp_dir)
+
     print('Everything done correctly. To restore your backup launch the script with the xxx flag')
 
 class Configuration:
 
     def config_dir():
-        cfg_dir = os.path.join(default, 'share/config')
+
+        """(str) Return the absolut path of the configuration directory"""
+
+        cfg_dir = os.path.join(default, 'share', 'config')
         return(cfg_dir)
 
     def main_file():
+
+        """(str) Return the absolut path of the main configuration file"""
+
         cfg_file = os.path.join(Configuration.config_dir(), 'be.shell')
         return(cfg_file)
 
     def main_dir():
-        main_dir = os.path.join(default, 'share/apps/be.shell')
+
+        """(str) Return the absolut path of the main configuration directory"""
+
+        main_dir = os.path.join(default, 'share', 'apps', 'be.shell')
         return(main_dir)
 
 class Theme:
 
     def name():
 
-        """(str) Return the name of the theme actually used.
-
-        e.g.
-        >>> beshell.Theme.name()
-        'Hydrogen'"""
+        """(str) Return the name of the theme actually used."""
 
         cfg = open(Configuration.main_file())
         cfg.seek(0, 0)  #to be sure, set the offset to the start of the file explicity
@@ -178,17 +190,9 @@ class Theme:
 
     def path():
 
-        """(str) Return the absolut path of the theme in use.
+        """(str) Return the absolut path of the directory of the theme in use."""
 
-        e.g.
-        >>> beshell.Theme.path()
-        '/home/nemo/.kde4/share/apps/be.shell/Themes/Hydrogen'"""
-
-        cfg = open(Configuration.main_file())
-        cfg.seek(0, 0)
-        for line in cfg:
-            if line.startswith('Theme'):
-                outstring = os.path.join(Configuration.main_dir(), 'Themes', line[6:-1])
+        outstring = os.path.join(Configuration.main_dir(), 'Themes', Theme.name())
         return(outstring)
 
     def list(self=''):
