@@ -22,4 +22,4 @@
 # doing. The __all__ var make that all the module in spam could be
 # imported with 'from spam import *' flag
 
-__all__ = ["archive", "beshell", "check", "webmail", "fs", "music"]
+__all__ = ["archive", "beshell", "check", "clouds", "webmail", "fs", "music", "methods"]
