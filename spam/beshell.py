@@ -23,7 +23,7 @@ gitpython and check (the first one you could install using pip, the second one
 it's only avaible on the same github repo that you have used to download this
 module).
 
-Global functins defined:
+Global functions defined:
     - beshell.clone: download the source code into default project dir
     - beshell.up: check if there are any update avaiable and install it
     - beshell.install: compile and install BE::Shell on your system
