@@ -17,27 +17,28 @@
 #   Free Software Foundation, Inc.,
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+"""This module define a function that check the email into a choosen inbox.
+
+Global functions defined:
+    - process_mailbox: return a info with mailbox unread messages"""
+
 import os
 import re
 import imaplib
 import email
 import datetime
 
-def insert_data(string, rep_dict):
-    pattern = re.compile("|".join([re.escape(k) for k in rep_dict.keys()]), re.M)
-    return pattern.sub(lambda x: rep_dict[x.group(0)], string)
+from spam import beshell
+from spam import methods
 
-format_string = ''
-with open(os.path.expanduser('~/.kde4/share/apps/be.shell/Themes/Hydrogen/twolame/single_mail.format')) as f:
-    for line in f:
-        if line.startswith('#'):
-            continue
-        format_string += line
-
-format_string = re.sub(r'>\s<', '><', format_string)
-format_string = re.sub(r'\n', '', format_string)
+global format_file
+format_file = os.path.join(beshell.Theme.path(), 'twolame', 'single_mail.format')
 
 def process_mailbox(mailbox):
+
+    """(list) return a list with html formatted unread messages from a choosen mailbox.
+    Require as only argument the mailbox initialized and selected using imaplib std
+    module functions"""
 
     rv, data = mailbox.search(None, "unseen")
 
@@ -70,12 +71,10 @@ def process_mailbox(mailbox):
         _date = msg['Date']
 
         _out = [_from, _num, _message, _date]
-        o = {}
-        for index, item in enumerate(_out):
-            i = '{' + str(index) + '}'
-            o[i] = item
 
-        outstring = insert_data(format_string, o)
+        o = methods.create_dict(_out)
+
+        outstring = methods.insert_data(methods.format_string(format_file), o)
 
         info.append(outstring)
 
