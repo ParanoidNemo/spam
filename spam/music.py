@@ -17,34 +17,32 @@
 #   Free Software Foundation, Inc.,
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+"""This module define a set of functions that retrive information from mpd.
+It depends from mudicpd module; you could install it using pip
+
+Global functions defined:
+    - process_mpd: connect to mpd and retrive information about current song and
+    mpd options
+    - playlist: return the actual playlist from mpd
+    - cover_finder: retrive the cover for the current song
+    - cover: return a dict contains the cover image"""
+
 #import std module(s)
 import os, sys, io
 import re
 
 #import web module(s)
 import musicpd
-from PIL import Image
 from spam import beshell
+from spam import methods
 
-#-------------------------format informations-----------------------------------
-
-def insert_data(string, rep_dict):
-    pattern = re.compile("|".join([re.escape(k) for k in rep_dict.keys()]), re.M)
-    return pattern.sub(lambda x: rep_dict[x.group(0)], string)
-
-format_string = ''
-with open(os.path.join(beshell.Theme.path(), 'twolame', 'playlist.format')) as f:
-    for line in f:
-        if line.startswith('#'):
-            continue
-        format_string += line
-
-format_string = re.sub(r'>\s<', '><', format_string)
-format_string = re.sub(r'\n', '', format_string)
-
-#-------------------------------------------------------------------------------
+global format_file
+format_file = os.path.join(beshell.Theme.path(), 'twolame', 'playlist.format')
 
 def process_mpd(client):
+
+    """(list) return a list containig mpd options and current song info. Require
+    one argument, that is the client obj initialized with musicpd module"""
 
     try:
         client.connect('localhost', 6600)
@@ -76,6 +74,8 @@ def process_mpd(client):
 #retriving playlist info
 def playlist(client):
 
+    """(list) return a html formatted list containig the actual playlist retrived from mpd"""
+
     try:
         client.connect('localhost', 6600)
     except Exception:
@@ -102,13 +102,10 @@ def playlist(client):
         artist = song['artist']
 
         _out = [pos, title, artist]
-        o = {}
 
-        for index, item in enumerate(_out):
-            i = '{' + str(index) + '}'
-            o[i] = item
+        o = methods.create_dict(_out)
 
-        outstring = insert_data(format_string, o)
+        outstring = methods.insert_data(methods.format_string(format_file), o)
 
         playlist_info.append(outstring)
 
@@ -116,6 +113,9 @@ def playlist(client):
 
 #retrive cover image(s)
 def cover_finder(path, client):
+
+    """(image) return the cover image for the current song or a blank one if
+    any cover is found"""
 
     path = os.path.expanduser(path)
     default_image = os.path.join(beshell.Theme.path(), 'twolame', 'blank.jpg')
@@ -132,8 +132,8 @@ def cover_finder(path, client):
 
 def cover(path, client):
 
-    cover = {}
+    """(dict) return a dict with the cover found by cover_finder function"""
+
     im = cover_finder(path, client)
 
-    cover['{cover}'] = im
-    return(cover)
+    return({'{cover}': im})
