@@ -17,11 +17,20 @@
 #   Free Software Foundation, Inc.,
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+"""This module define a set of functions to check variuos aspects of the system.
+
+Global functions defined:
+    - check.prg: check if a program is installed and if is executable is locate in /usr/bin
+    - check.date: verify how much time is passed from a date saved into a timestamp file
+    - check.distro: check the distro you are on"""
+
 import os, sys
 import datetime
 
 #start def the function(s)
-def prg(self):      #check if an executable exists in /usr/bin/
+def prg(self):
+
+    """(bool) This function check if an executable exists in /usr/bin"""
 
     if os.path.exists('/usr/bin/' + self):
         return True
@@ -29,7 +38,9 @@ def prg(self):      #check if an executable exists in /usr/bin/
         return False
 
 
-def date(timestamp):     #check how much time as passed (default=days) between to given dates
+def date(timestamp):
+
+    """This function check how much time as passed (default value = days) between a give date and today"""
 
     t = datetime.date.today()
     date_code = t.toordinal()
@@ -46,6 +57,8 @@ def date(timestamp):     #check how much time as passed (default=days) between t
         print(date_code - old_date_code)
 
 def distro():           #check the current distro installed on the system
+
+    """This function check what is the distro you are on"""
 
     if prg('aptitude'):
         distro = 'debian'
