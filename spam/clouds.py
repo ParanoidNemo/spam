@@ -17,6 +17,22 @@
 #   Free Software Foundation, Inc.,
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+"""This module define a set of classes to interact with most of the common cloud
+service.
+
+Classes releated functions:
+
+Class clouds.Rclone:
+define one function that return informations regardings the cloud service choose;
+it depends by rclone.
+    - Rclone.space_info: return a list containing space informations
+
+Class clouds.Mega:
+define one function that interface with the mega cloud service; it depends by megatools
+    -Mega.space_info: return a list containing space informations
+
+For more in depth usage and example check the docstring contained in the functions"""
+
 import os, sys, re
 import subprocess
 
@@ -25,13 +41,17 @@ class Rclone():
 
     def space_info(remote, service):
 
-        cloud_storage = remote + ':'
+        """(list) return a list containing total space, free space, used space
+        and service name (e.g. dropbox, drive etc). Require two arguments: the name of
+        the remote set with rclone and the name of the cloud service"""
 
-        size = subprocess.run(['rclone', 'size', cloud_storage], stdout=subprocess.PIPE, universal_newlines=True)
+        cloud_storage = remote + ":"
+
+        size = subprocess.run(["rclone", "size", cloud_storage], stdout=subprocess.PIPE, universal_newlines=True)
         size = size.stdout
 
         for line in size.split(sep='\n'):
-            if line.startswith('Total size'):
+            if line.startswith("Total size"):
                 tot = line
 
         tot = re.sub(r'\s', '\n', tot)
@@ -42,9 +62,9 @@ class Rclone():
 
         used_space = l[2][:-1]
 
-        if service == 'dropbox':
+        if service == "dropbox":
             total_space = float(20)
-        elif service == 'drive':
+        elif service == "drive":
             total_space = float(15)
         else:
             print("Service not found")
@@ -58,21 +78,25 @@ class Rclone():
 
     def compare(remote, local):
 
-        cloud_storage = remote + ':'
+        cloud_storage = remote + ":"
         _local = os.path.expanduser(local)
 
-        check = subprocess.run(['rclone', 'check', '-q', cloud_storage, _local])
+        check = subprocess.run(["rclone", "check", "-q", cloud_storage, _local])
 
         return(str(check.returncode))
 
 class Mega():
 
-    def space_info(size):
+    def space_info(size="gb"):
+
+        """(list) return a list containing total space, free space, used space and
+        service name. Have one optional arguments: the measure unit you want to use to
+        the output data (default = Gb)"""
 
         out = []
-        _size = '--' + size
+        _size = "--" + size
 
-        s = subprocess.run(['megadf', _size], stdout=subprocess.PIPE, universal_newlines=True)
+        s = subprocess.run(["megadf", _size], stdout=subprocess.PIPE, universal_newlines=True)
 
         for line in s.stdout.split(sep='\n'):
             line = re.sub(r'\s', '\n', line)
@@ -80,6 +104,6 @@ class Mega():
                 if line.isdigit():
                     out.append(line)
 
-        out.append('mega')
+        out.append("mega")
 
         return(out)
