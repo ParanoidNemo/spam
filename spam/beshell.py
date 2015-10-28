@@ -21,11 +21,12 @@
 beshell and it's abs path. In order to work it depends to 2 (two) extra modules
 gitpython and check (the first one you could install using pip, the second one
 it's only avaible on the same github repo that you have used to download this
-module.)
+module).
 
 Global functins defined:
-- beshell.up: check if there are any update avaiable and install it
-- beshell.install: download, compile and install BE::Shell on your system
+    - beshell.clone: download the source code into default project dir
+    - beshell.up: check if there are any update avaiable and install it
+    - beshell.install: compile and install BE::Shell on your system
 
 Classes releated functions:
 
@@ -54,11 +55,14 @@ import subprocess
 #import downloaded module(s)
 import git
 
+global home, remote
 global project_dir
 global beshell_dir
 
-project_dir = os.path.expanduser('~/project')
-beshell_dir = os.path.join(project_dir, 'be-shell')
+home = os.path.expanduser('~')
+remote = 'git://git.code.sf.net/p/be-shell/code'
+project_dir = os.path.join(home, 'project')
+beshell_dir = os.path.join(project_dir, 'be-shell-code')
 g = git.cmd.Git(beshell_dir)
 g2 = git.cmd.Git(project_dir)
 
@@ -67,6 +71,17 @@ if os.path.isdir(os.path.expanduser('~/.kde4')):
 else:
     default = os.path.expanduser('~/.kde')
 
+def clone():
+
+    """This function clone the source code of BE::Shell into the default project
+    directory (~/project/be-shell-code), creating it if doesn't exists"""
+
+    while not os.path.isdir(project_dir):
+        os.makedirs(project_dir)
+    else:
+        print('Cloning package(s) from remote repo..')
+        g2.clone(remote, 'be-shell-code')
+
 def up():
 
     """This function check the status of the installation of BE::Shell on your
@@ -74,37 +89,43 @@ def up():
     are some changes download and install the new version"""
 
     if os.path.isdir(beshell_dir):
+
         ctrl_seq = 'Already up-to-date.'
         git_out = g.pull()
 
         if git_out != ctrl_seq:
-            os.chdir(os.path.join(beshell_dir, 'build'))
-            print('Running make, please wait..')
-            make_out = subprocess.check_call('make')
-            print('Make process end correctly.\nStart installation..')
-            install_out = subprocess.check_call(['sudo', 'make', 'install'])
-            print('Everything done, BE::Shell is now up to date.')
+
+            os.chdir(beshell_dir)
+
+            if os.path.isdir('build'):
+                shutil.rmtree('build')
+                install()
+            else:
+                install()
+
         else:
             print(git_out)
 
-def install():
-    remote = 'git://git.code.sf.net/p/be-shell/code'
-    while not os.path.isdir(project_dir):
-        os.makedirs(project_dir)
     else:
-        os.chdir(project_dir)
-        print('Cloning package(s) from remote repo..')
-        clone_out = g2.clone(remote, 'be-shell')
-        os.chdir(project_dir)
-        print('Configuring the system..')
-        configure_out = subprocess.check_call('./configure')
+        print("BE::Shell source code not found into the default directory (~/project/be-shell-code); in order to use this features you need to clone the repo into that path.\nYou could use the clone function to do so")
+
+def install():
+
+        os.chdir(beshell_dir)
+
+        print("Running configure")
+        subprocess.run(['./configure'], stdout=subprocess.PIPE, universal_newlines=True)
+
         os.chdir('build')
+
         print('Running make, please wait..')
-        make_out = subprocess.check_call('make')
+        make_out = subprocess.run(['make'], stdout=subprocess.PIPE, universal_newlines=True)
+
         print('Make process end correctly.\nStart installation..')
-        install_out = subprocess.check_call(['sudo', 'make', 'install'])
+        install_out = subprocess.run(['sudo', 'make', 'install'], stdout=subprocess.PIPE, universal_newlines=True)
+
         print('Everything done, BE::Shell is now installed.\nIf you want to start it run "kquitapp plasmashell; sleep 2; be.shell"')
-        
+
 def backup():
     bk_path = os.path.expanduser('~/.local/share/be.shell/backup')
     try:
