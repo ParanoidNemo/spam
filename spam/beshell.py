@@ -71,87 +71,6 @@ if os.path.isdir(os.path.expanduser('~/.kde4')):
 else:
     default = os.path.expanduser('~/.kde')
 
-def clone():
-
-    """This function clone the source code of BE::Shell into the default project
-    directory (~/project/be-shell-code), creating it if doesn't exists"""
-
-    while not os.path.isdir(project_dir):
-        os.makedirs(project_dir)
-    else:
-        print('Cloning package(s) from remote repo..')
-        g2.clone(remote, 'be-shell-code')
-
-def up():
-
-    """This function check the status of the installation of BE::Shell on your
-    system, compare it with the actual status on the github repo and if there
-    are some changes download and install the new version"""
-
-    if os.path.isdir(beshell_dir):
-
-        ctrl_seq = 'Already up-to-date.'
-        git_out = g.pull()
-
-        if git_out != ctrl_seq:
-
-            os.chdir(beshell_dir)
-
-            if os.path.isdir('build'):
-                shutil.rmtree('build')
-                install()
-            else:
-                install()
-
-        else:
-            print(git_out)
-
-    else:
-        print("BE::Shell source code not found into the default directory (~/project/be-shell-code); in order to use this features you need to clone the repo into that path.\nYou could use the clone function to do so")
-
-def install():
-
-        os.chdir(beshell_dir)
-
-        print("Running configure")
-        subprocess.run(['./configure'], stdout=subprocess.PIPE, universal_newlines=True)
-
-        os.chdir('build')
-
-        print('Running make, please wait..')
-        make_out = subprocess.run(['make'], stdout=subprocess.PIPE, universal_newlines=True)
-
-        print('Make process end correctly.\nStart installation..')
-        install_out = subprocess.run(['sudo', 'make', 'install'], stdout=subprocess.PIPE, universal_newlines=True)
-
-        print('Everything done, BE::Shell is now installed.\nIf you want to start it run "kquitapp plasmashell; sleep 2; be.shell"')
-
-def backup():
-
-    bk_path = os.path.expanduser('~/.local/share/be.shell/backup')
-
-    try:
-        os.makedirs(bk_path)
-    except FileExistsError:
-        pass
-    except Exception as ex:
-        print(ex)
-
-    tmp_dir = tempfile.mkdtemp(dir=bk_path)
-    _tmp_dir = os.path.join(tmp_dir, Theme.name())
-
-    shutil.copytree(Theme.path(), _tmp_dir)
-    shutil.copy2(Configuration.main_file(), _tmp_dir)
-
-    os.chdir(bk_path)
-
-    for dirs in os.listdir(os.getcwd()):
-        _dir = dirs
-        archive.compress(_dir, bk_path, name=Theme.name())
-        shutil.rmtree(tmp_dir)
-
-    print('Everything done correctly. To restore your backup launch the script with the xxx flag')
-
 class Configuration:
 
     def config_dir():
@@ -195,7 +114,7 @@ class Theme:
         outstring = os.path.join(Configuration.main_dir(), 'Themes', Theme.name())
         return(outstring)
 
-    def list(self=''):
+    def l_list():
 
         """(lst) Return a list of locally installed themes"""
 
@@ -207,16 +126,9 @@ class Theme:
             if not t.startswith('.'):
                 d[i] = t
                 i += 1
-        if not self == '':
-            for index, item in enumerate(d.values()):
-                if self == 'list':
-                    print(item)
-                elif self == 'dict':
-                    print(index, '-->', item)
-        else:
-            return(d)
+        return(d)
 
-    def d_list(self=''):
+    def d_list():
 
         """(lst) Return a list of locally downloaded themes"""
 
@@ -232,11 +144,97 @@ class Theme:
             if not t.startswith('.'):
                 d[i] = t
                 i += 1
-        if not self == '':
-            for index, item in enumerate(d.values()):
-                if self == 'list':
-                    print(item)
-                elif self == 'dict':
-                    print(index, '-->', item)
+        return(d)
+
+class Cmd:
+
+    def install_theme(cfg_file, theme_dir):
+
+        """(void) install choosen configuration file and theme"""
+
+        shutil.copy2(cfg_file, Configuration.config_dir())
+        os.rename(cfg_file, 'be.shell')
+        print("Configuration file copied..\n")
+        shutil.copytree(theme_dir, os.path.join(beshell.Configuration.main_dir, 'Themes'))
+        print("Theme directory copied..\nPlease reload the shell to see the applied theme")
+
+    def clone():
+
+        """This function clone the source code of BE::Shell into the default project
+        directory (~/project/be-shell-code), creating it if doesn't exists"""
+
+        while not os.path.isdir(project_dir):
+            os.makedirs(project_dir)
         else:
-            return(d)
+            print('Cloning package(s) from remote repo..')
+            g2.clone(remote, 'be-shell-code')
+
+    def up():
+
+        """(void) check the status of the installation of BE::Shell on your
+        system, compare it with the actual status on the github repo and if there
+        are some changes download and install the new version"""
+
+        if os.path.isdir(beshell_dir):
+
+            ctrl_seq = 'Already up-to-date.'
+            git_out = g.pull()
+
+            if git_out != ctrl_seq:
+
+                os.chdir(beshell_dir)
+
+                if os.path.isdir('build'):
+                    shutil.rmtree('build')
+                    install()
+                else:
+                    install()
+
+            else:
+                print(git_out)
+
+        else:
+            print("BE::Shell source code not found into the default directory (~/project/be-shell-code); in order to use this features you need to clone the repo into that path.\nYou could use the clone function to do so")
+
+    def install():
+
+            os.chdir(beshell_dir)
+
+            print("Running configure")
+            subprocess.run(['./configure'], stdout=subprocess.PIPE, universal_newlines=True)
+
+            os.chdir('build')
+
+            print('Running make, please wait..')
+            make_out = subprocess.run(['make'], stdout=subprocess.PIPE, universal_newlines=True)
+
+            print('Make process end correctly.\nStart installation..')
+            install_out = subprocess.run(['sudo', 'make', 'install'], stdout=subprocess.PIPE, universal_newlines=True)
+
+            print('Everything done, BE::Shell is now installed.\nIf you want to start it run "kquitapp plasmashell; sleep 2; be.shell"')
+
+    def backup():
+
+        bk_path = os.path.expanduser('~/.local/share/be.shell/backup')
+
+        try:
+            os.makedirs(bk_path)
+        except FileExistsError:
+            pass
+        except Exception as ex:
+            print(ex)
+
+        tmp_dir = tempfile.mkdtemp(dir=bk_path)
+        _tmp_dir = os.path.join(tmp_dir, Theme.name())
+
+        shutil.copytree(Theme.path(), _tmp_dir)
+        shutil.copy2(Configuration.main_file(), _tmp_dir)
+
+        os.chdir(bk_path)
+
+        for dirs in os.listdir(os.getcwd()):
+            _dir = dirs
+            archive.compress(_dir, bk_path, name=Theme.name())
+            shutil.rmtree(tmp_dir)
+
+        print('Everything done correctly. To restore your backup launch the script with the xxx flag')
