@@ -38,6 +38,7 @@ from spam import methods
 
 global format_file
 format_file = os.path.join(beshell.Theme.path(), 'twolame', 'playlist.format')
+format_file2 = os.path.join(beshell.Theme.path(), 'twolame', 'current_song.format')
 
 def process_mpd(client):
 
@@ -81,6 +82,8 @@ def playlist(client):
     except Exception:
         pass
 
+    cs = client.currentsong()['title'][:20]
+
     client.iterate = True
     playlist_info = []
 
@@ -105,7 +108,10 @@ def playlist(client):
 
         o = methods.create_dict(_out)
 
-        outstring = methods.insert_data(methods.format_string(format_file), o)
+        if title[:20] == cs:
+            outstring = methods.insert_data(methods.format_string(format_file2), o)
+        else:
+            outstring = methods.insert_data(methods.format_string(format_file), o)
 
         playlist_info.append(outstring)
 
@@ -121,9 +127,10 @@ def cover_finder(path, client):
     default_image = os.path.join(beshell.Theme.path(), 'twolame', 'blank.jpg')
 
     if os.path.exists(path):
-        try:
-            im = os.path.join(path, process_mpd(client)[5], process_mpd(client)[7], 'cover.jpg')
-        except FileNotFoundError:
+        i = os.path.join(path, process_mpd(client)[5], process_mpd(client)[7], 'cover.jpg')
+        if os.path.isfile(i):
+            im = i
+        else:
             im = default_image
     else:
         im = default_image
@@ -133,6 +140,11 @@ def cover_finder(path, client):
 def cover(path, client):
 
     """(dict) return a dict with the cover found by cover_finder function"""
+
+    try:
+        client.connect('localhost', 6600)
+    except Exception:
+        pass
 
     im = cover_finder(path, client)
 
