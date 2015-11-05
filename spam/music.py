@@ -90,12 +90,13 @@ def playlist(client):
     for song in client.playlistinfo():
 
         pos_val = int(song['pos']) + 1
-        _pos_val = str(pos_val)
+        pos = str(pos_val)
+#        _pos_val = str(pos_val)
 
-        if len(_pos_val) == 1:
-            pos = str('0' + str(pos_val))
-        else:
-            pos = str(pos_val)
+#        if len(_pos_val) == 1:
+#            pos = str('0' + str(pos_val))
+#        else:
+#            pos = str(pos_val)
 
         if len(song['title']) > 30:
             title = str(song['title'])[:28] + '..'
@@ -104,9 +105,26 @@ def playlist(client):
 
         artist = song['artist']
 
-        _out = [pos, title, artist]
+        if len(song["time"]) >= 3:
+            time = int(song["time"])/60
+            time = str(time)
+            if len(time) > 4:
+                time = time[:4]
+            elif len(time) == 3:
+                time = time + '0'
+        elif int(song["time"]) >= 60:
+            time = int(song["time"])/60
+            time = str(time)
+            if len(time) > 4:
+                time = time[:4]
+            elif len(time) == 3:
+                time = time + '0'
+        else:
+            time = '0.' + song["time"]
 
-        o = methods.create_dict(_out)
+        out = [pos, title, artist, time]
+
+        o = methods.create_dict(out)
 
         if title[:20] == cs:
             outstring = methods.insert_data(methods.format_string(format_file2), o)
