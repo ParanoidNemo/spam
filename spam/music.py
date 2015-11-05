@@ -82,7 +82,10 @@ def playlist(client):
     except Exception:
         pass
 
-    cs = client.currentsong()['title'][:20]
+    try:
+        cs = client.currentsong()['title'][:20]
+    except Exception:
+        cs = "n/a"
 
     client.iterate = True
     playlist_info = []
@@ -136,18 +139,26 @@ def playlist(client):
     return(playlist_info)
 
 #retrive cover image(s)
-def cover_finder(path, client):
+def cover(path, client):
 
     """(image) return the cover image for the current song or a blank one if
     any cover is found"""
+
+    try:
+        client.connect('localhost', 6600)
+    except Exception:
+        pass
 
     path = os.path.expanduser(path)
     default_image = os.path.join(beshell.Theme.path(), 'twolame', 'blank.jpg')
 
     if os.path.exists(path):
         i = os.path.join(path, process_mpd(client)[5], process_mpd(client)[7], 'cover.jpg')
+        i2 = os.path.join(path, process_mpd(client)[5], process_mpd(client)[7], 'cover.png')
         if os.path.isfile(i):
             im = i
+        elif os.path.isfile(i2):
+            im = i2
         else:
             im = default_image
     else:
@@ -155,15 +166,15 @@ def cover_finder(path, client):
 
     return(im)
 
-def cover(path, client):
+#def cover(path, client):
 
-    """(dict) return a dict with the cover found by cover_finder function"""
+#    """(dict) return a dict with the cover found by cover_finder function"""
 
-    try:
-        client.connect('localhost', 6600)
-    except Exception:
-        pass
+#    try:
+#        client.connect('localhost', 6600)
+#    except Exception:
+#        pass
 
-    im = cover_finder(path, client)
+#    im = cover_finder(path, client)
 
-    return({'{cover}': im})
+#    return({'{cover}': im})
