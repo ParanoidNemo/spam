@@ -47,3 +47,19 @@ def format_string(format_file):
     format_string = re.sub(r'\n', '', format_string)
 
     return(format_string)
+
+def time_convertion(seconds):
+
+    """(tuple) convert seconds into minutes/hours, return a tuple (hours, minutes, seconds)"""
+
+    minutes = 0
+    hours = 0
+
+    while seconds >= 60:
+        minutes += 1
+        seconds = seconds - 60
+        while minutes >= 60:
+            hours += 1
+            minutes = minutes - 60
+
+    return(hours, minutes, seconds)
