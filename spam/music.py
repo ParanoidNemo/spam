@@ -108,22 +108,30 @@ def playlist(client):
 
         artist = song['artist']
 
-        if len(song["time"]) >= 3:
-            time = int(song["time"])/60
-            time = str(time)
-            if len(time) > 4:
-                time = time[:4]
-            elif len(time) == 3:
-                time = time + '0'
-        elif int(song["time"]) >= 60:
-            time = int(song["time"])/60
-            time = str(time)
-            if len(time) > 4:
-                time = time[:4]
-            elif len(time) == 3:
-                time = time + '0'
-        else:
-            time = '0.' + song["time"]
+        t = methods.time_convertion(int(song["time"]))
+        time = str(t[1]) + '.' + str(t[2])
+
+        tl = time.split(sep='.')
+
+        if len(tl[-1]) < 2:
+            time = time + '0'
+
+#        if len(song["time"]) >= 3:
+#            time = int(song["time"])/60
+#            time = str(time)
+#            if len(time) > 4:
+#                time = time[:4]
+#            elif len(time) == 3:
+#                time = time + '0'
+#        elif int(song["time"]) >= 60:
+#            time = int(song["time"])/60
+#            time = str(time)
+#            if len(time) > 4:
+#                time = time[:4]
+#            elif len(time) == 3:
+#                time = time + '0'
+#        else:
+#            time = '0.' + song["time"]
 
         out = [pos, title, artist, time]
 
