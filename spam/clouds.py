@@ -72,6 +72,9 @@ class Rclone():
 
         free_space = total_space - float(used_space)
 
+        used_space = "{0:.1f}".format(float(used_space))
+        free_space = "{0:.1f}".format(free_space)
+
         out = [str(total_space), str(free_space), used_space, service]
 
         return(out)
@@ -102,6 +105,7 @@ class Mega():
             line = re.sub(r'\s', '\n', line)
             for line in line.split(sep='\n'):
                 if line.isdigit():
+                    line = line + '.0'
                     out.append(line)
 
         out.append("mega")
