@@ -8,6 +8,7 @@ Global functions defined:
     - format_string: generate a format string from an external file"""
 
 import os, re
+import subprocess
 
 def insert_data(string, rep_dict):
 
@@ -63,3 +64,7 @@ def time_convertion(seconds):
             minutes = minutes - 60
 
     return(hours, minutes, seconds)
+
+def call_command(command):
+    proc = subprocess.run(command.split(), stdout=subprocess.PIPE, universal_newlines=True)
+    return(proc.stdout)
