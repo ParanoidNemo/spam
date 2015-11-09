@@ -75,7 +75,10 @@ class Rclone():
         used_space = "{0:.1f}".format(float(used_space))
         free_space = "{0:.1f}".format(free_space)
 
-        out = [str(total_space), str(free_space), used_space, service]
+        pfree = 100 * float(free_space) // int(total_space)
+        pused = 100 * float(used_space) // int(total_space)
+
+        out = [str(total_space), str(free_space), used_space, service, str(pfree), str(pused)]
 
         return(out)
 
@@ -109,5 +112,11 @@ class Mega():
                     out.append(line)
 
         out.append("mega")
+
+        pfree = 100 * float(out[2]) // float(out[0])
+        pused = 100 * float(out[1]) // float(out[0])
+
+        out.append(str(pfree))
+        out.append(str(pused))
 
         return(out)
