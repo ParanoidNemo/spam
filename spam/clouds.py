@@ -36,6 +36,7 @@ For more in depth usage and example check the docstring contained in the functio
 import os, sys, re
 import subprocess
 
+from spam import methods
 
 class Rclone():
 
@@ -47,8 +48,7 @@ class Rclone():
 
         cloud_storage = remote + ":"
 
-        size = subprocess.run(["rclone", "size", cloud_storage], stdout=subprocess.PIPE, universal_newlines=True)
-        size = size.stdout
+        size = methods.call_command("rclone size " + cloud_storage)
 
         for line in size.split(sep='\n'):
             if line.startswith("Total size"):
@@ -102,9 +102,9 @@ class Mega():
         out = []
         _size = "--" + size
 
-        s = subprocess.run(["megadf", _size], stdout=subprocess.PIPE, universal_newlines=True)
+        s = methods.call_command("megadf " + _size)
 
-        for line in s.stdout.split(sep='\n'):
+        for line in s.split(sep='\n'):
             line = re.sub(r'\s', '\n', line)
             for line in line.split(sep='\n'):
                 if line.isdigit():
