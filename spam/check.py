@@ -55,18 +55,3 @@ def date(timestamp):
 
     if date_code > old_date_code:
         print(date_code - old_date_code)
-
-def distro():           #check the current distro installed on the system
-
-    """This function check what is the distro you are on"""
-
-    if prg('aptitude'):
-        distro = 'debian'
-    elif prg('dnf'):
-        distro = 'fedora'
-    elif prg('pacman'):
-        distro = 'archlinux'
-    else:
-        distro = ''
-
-    return(distro)
