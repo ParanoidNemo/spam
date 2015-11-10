@@ -55,15 +55,21 @@ def time_convertion(seconds):
 
     minutes = 0
     hours = 0
+    days = 0
 
     while seconds >= 60:
         minutes += 1
-        seconds = seconds - 60
-        while minutes >= 60:
-            hours += 1
-            minutes = minutes - 60
+        seconds -= 60
 
-    return(hours, minutes, seconds)
+    while minutes >= 60:
+        hours += 1
+        minutes -= 60
+
+    while hours >= 24:
+        days += 1
+        hours -= 24
+
+    return(days, hours, minutes, seconds)
 
 def call_command(command):
     proc = subprocess.run(command.split(), stdout=subprocess.PIPE, universal_newlines=True)
