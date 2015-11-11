@@ -77,9 +77,17 @@ def fs(mountpoint):
     command_line = "df -TPh " + os.path.expanduser(mountpoint)
 
     values = [line for line in methods.call_command(command_line).split('\n') if line][1].split()
+
     free_perc = 100 - int(values[5][:-1])
     free_perc = str(free_perc) + '%'
     values.append(free_perc)
+
+    name = values[6]
+    if name == "/":
+        name = "Root"
+    else:
+        name = name.split('/')[1].strip('/').title()
+    values.append(name)
 
     return(values)
 
