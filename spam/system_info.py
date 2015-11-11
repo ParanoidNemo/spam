@@ -152,3 +152,31 @@ def distro():
         distro = "GNU/Linux"
 
     return(distro)
+
+def update(pm):
+
+    """"""
+
+    if pm == "aptitude":
+        command_line = "aptitude search ~U"
+    elif pm == "dnf":
+        command_line = "dnf check-update"
+    elif pm == "pacman":
+        command_line = "checkupdates"
+        command_line_a = "cower --color=never -uq"
+    else:
+        print("Error: unknown package manager")
+
+    update = methods.call_command(command_line).split()
+    repo = len(update)
+
+    if check.prg("cower"):
+        update_aur = []
+        for line in methods.call_command(command_line_a).split():
+            if line.startswith("error"):
+                pass
+            else:
+                update_aur.append(line)
+        aur = len(update_aur)
+
+    return(str(repo), str(aur))
