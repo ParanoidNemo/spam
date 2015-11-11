@@ -94,12 +94,6 @@ def playlist(client):
 
         pos_val = int(song['pos']) + 1
         pos = str(pos_val)
-#        _pos_val = str(pos_val)
-
-#        if len(_pos_val) == 1:
-#            pos = str('0' + str(pos_val))
-#        else:
-#            pos = str(pos_val)
 
         if len(song['title']) > 30:
             title = str(song['title'])[:28] + '..'
@@ -115,23 +109,6 @@ def playlist(client):
 
         if len(tl[-1]) < 2:
             time = time + '0'
-
-#        if len(song["time"]) >= 3:
-#            time = int(song["time"])/60
-#            time = str(time)
-#            if len(time) > 4:
-#                time = time[:4]
-#            elif len(time) == 3:
-#                time = time + '0'
-#        elif int(song["time"]) >= 60:
-#            time = int(song["time"])/60
-#            time = str(time)
-#            if len(time) > 4:
-#                time = time[:4]
-#            elif len(time) == 3:
-#                time = time + '0'
-#        else:
-#            time = '0.' + song["time"]
 
         out = [pos, title, artist, time]
 
@@ -173,16 +150,3 @@ def cover(path, client):
         im = default_image
 
     return(im)
-
-#def cover(path, client):
-
-#    """(dict) return a dict with the cover found by cover_finder function"""
-
-#    try:
-#        client.connect('localhost', 6600)
-#    except Exception:
-#        pass
-
-#    im = cover_finder(path, client)
-
-#    return({'{cover}': im})
