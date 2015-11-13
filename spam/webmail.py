@@ -58,19 +58,17 @@ def process_mailbox(mailbox):
         _num = num.decode("ASCII")
         _from = msg['From']
 
-        if len(msg['Subject']) > 40:
-            sub = msg['Subject'][:37] + '...'
-        else:
-            sub = msg['Subject']
-
         try:
-            _message = sub
-        except TypeError:
-            _message = ''
+            if len(msg['Subject']) > 40:
+                _sub = msg['Subject'][:37] + '...'
+            else:
+                _sub = msg['Subject']
+        except Exception:
+            _sub = ''
 
         _date = msg['Date']
 
-        _out = [_from, _num, _message, _date]
+        _out = [_from, _num, _sub, _date]
 
         o = methods.create_dict(_out)
 
