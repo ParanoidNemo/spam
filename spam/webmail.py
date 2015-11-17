@@ -58,6 +58,11 @@ def process_mailbox(mailbox):
         _num = num.decode("ASCII")
         _from = msg['From']
 
+        # ciclo if per To, se andrea.calzavacca work +=1 se paranoid.nemo home +=1
+        # capire se è il caso di metterlo qui o in mail.py, più probabile sia meglio
+        # la seconda opzione. Nel caso capire come avere un To affidabile
+        _to = msg['To']
+
         try:
             if len(msg['Subject']) > 40:
                 _sub = msg['Subject'][:37] + '...'
@@ -68,7 +73,7 @@ def process_mailbox(mailbox):
 
         _date = msg['Date']
 
-        _out = [_from, _num, _sub, _date]
+        _out = [_from, _num, _sub, _date, _to]
 
         o = methods.create_dict(_out)
 
