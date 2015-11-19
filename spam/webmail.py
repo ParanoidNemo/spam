@@ -56,22 +56,22 @@ def process_mailbox(mailbox):
 
         msg = email.message_from_bytes(data[0][1])
         _num = num.decode("ASCII")
-        _from = msg['From']
+        _from = msg["From"]
 
         # ciclo if per To, se andrea.calzavacca work +=1 se paranoid.nemo home +=1
         # capire se è il caso di metterlo qui o in mail.py, più probabile sia meglio
         # la seconda opzione. Nel caso capire come avere un To affidabile
-        _to = msg['To']
+        _to = msg["Delivered-To"]
 
         try:
-            if len(msg['Subject']) > 40:
-                _sub = msg['Subject'][:37] + '...'
+            if len(msg["Subject"]) > 40:
+                _sub = msg["Subject"][:37] + '...'
             else:
-                _sub = msg['Subject']
+                _sub = msg["Subject"]
         except Exception:
             _sub = ''
 
-        _date = msg['Date']
+        _date = msg["Date"]
 
         _out = [_from, _num, _sub, _date, _to]
 
@@ -82,3 +82,14 @@ def process_mailbox(mailbox):
         info.append(outstring)
 
     return(info)
+
+def new_message_count(mailbox):
+
+    """(string) return a string of total new email for the selected mailbox"""
+
+    rv, data = mailbox.search(None, "unseen")
+
+    new = data[0].decode(encoding="UTF-8")
+    tn = len(new.split())
+
+    return(str(tn))
