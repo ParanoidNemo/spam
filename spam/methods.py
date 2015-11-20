@@ -72,5 +72,21 @@ def time_convertion(seconds):
     return(days, hours, minutes, seconds)
 
 def call_command(command):
+
+    """(list) produce a list containing the stdout of a bash command execute with subprocess module"""
+
     proc = subprocess.run(command.split(), stdout=subprocess.PIPE, universal_newlines=True)
     return(proc.stdout)
+
+def sostitute_line(file_, match, new_line):
+
+    """(void) sostitute a choose line(s) with another one in a choose file"""
+
+    with open(file_, 'r+') as f:
+        lines = f.readlines()
+        f.seek(0)
+        f.truncate()
+        for line in lines:
+            if line.startswith(match):
+                line = line.replace(line, new_line)
+            f.write(line)
