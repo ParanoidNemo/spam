@@ -103,7 +103,7 @@ def playlist(client):
         artist = song['artist']
 
         t = methods.time_convertion(int(song["time"]))
-        time = str(t[1]) + '.' + str(t[2])
+        time = str(t[2]) + '.' + str(t[3])
 
         tl = time.split(sep='.')
 
