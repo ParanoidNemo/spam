@@ -27,8 +27,8 @@ def create_dict(rep_list):
     rep_dict = {}
 
     for index, item in enumerate(rep_list):
-        i = "{" + str(index) + "}"
-        rep_dict[i] = item
+        #i = "{" + str(index) + "}"
+        rep_dict["{%d}" %index] = item
 
     return(rep_dict)
 
