@@ -18,7 +18,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 # This file is an init file that make the whole directory spam a module
-# container. Please don't edit this file if you doesn't know what your
+# container. Please don't edit this file if you doesn't know what you are
 # doing. The __all__ var make that all the module in spam could be
 # imported with 'from spam import *' flag
 
