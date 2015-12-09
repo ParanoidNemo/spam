@@ -31,8 +31,10 @@ import datetime
 from spam import beshell
 from spam import methods
 
+theme = beshell.Theme()
+
 global format_file
-format_file = os.path.join(beshell.Theme.path(), 'twolame', 'single_mail.format')
+format_file = os.path.join(theme.path, 'twolame', 'single_mail.format')
 
 def process_mailbox(mailbox):
 

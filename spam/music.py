@@ -36,9 +36,11 @@ import musicpd
 from spam import beshell
 from spam import methods
 
+theme = beshell.Theme()
+
 global format_file
-format_file = os.path.join(beshell.Theme.path(), 'twolame', 'playlist.format')
-format_file2 = os.path.join(beshell.Theme.path(), 'twolame', 'current_song.format')
+format_file = os.path.join(theme.path, 'twolame', 'playlist.format')
+format_file2 = os.path.join(theme.path, 'twolame', 'current_song.format')
 
 def process_mpd(client):
 
@@ -135,7 +137,7 @@ def cover(path, client):
         pass
 
     path = os.path.expanduser(path)
-    default_image = os.path.join(beshell.Theme.path(), 'twolame', 'blank.jpg')
+    default_image = os.path.join(theme.path, 'twolame', 'blank.jpg')
 
     if os.path.exists(path):
         i = os.path.join(path, process_mpd(client)[5], process_mpd(client)[7], 'cover.jpg')
