@@ -71,54 +71,68 @@ if os.path.isdir(os.path.expanduser('~/.kde4')):
 else:
     default = os.path.expanduser('~/.kde')
 
-class Configuration:
+class Configuration(object):
 
-    def config_dir():
+    @property
+    def config_dir(self):
 
         """(str) Return the absolut path of the configuration directory"""
 
         cfg_dir = os.path.join(default, 'share', 'config')
-        return(cfg_dir)
+        return cfg_dir
 
-    def main_file():
+    @property
+    def main_file(self):
 
         """(str) Return the absolut path of the main configuration file"""
 
-        cfg_file = os.path.join(Configuration.config_dir(), 'be.shell')
-        return(cfg_file)
+        cfg = Configuration()
 
-    def main_dir():
+        cfg_file = os.path.join(cfg.config_dir, 'be.shell')
+        return cfg_file
+
+    @property
+    def main_dir(self):
 
         """(str) Return the absolut path of the main configuration directory"""
 
         main_dir = os.path.join(default, 'share', 'apps', 'be.shell')
-        return(main_dir)
+        return main_dir
 
-class Theme:
+class Theme(object):
 
-    def name():
+    @property
+    def name(self):
 
         """(str) Return the name of the theme actually used."""
 
-        cfg = open(Configuration.main_file())
-        cfg.seek(0, 0)  #to be sure, set the offset to the start of the file explicity
-        for line in cfg:
-            if line.startswith('Theme'):
-                outstring = line[6:-1]
-        return(outstring)
+        cfg = Configuration()
 
-    def path():
+        cfg_file = open(cfg.main_file)
+        cfg_file.seek(0, 0)  #to be sure, set the offset to the start of the file explicity
+        for line in cfg_file:
+            if line.startswith('Theme'):
+                name = line[6:-1]
+        return name
+
+    @property
+    def path(self):
 
         """(str) Return the absolut path of the directory of the theme in use."""
 
-        outstring = os.path.join(Configuration.main_dir(), 'Themes', Theme.name())
-        return(outstring)
+        cfg = Configuration()
+        theme = Theme()
+
+        path = os.path.join(cfg.main_dir, 'Themes', theme.name)
+        return path
 
     def l_list():
 
         """(lst) Return a list of locally installed themes"""
 
-        theme_dir = os.path.join(Configuration.main_dir(), 'Themes')
+        cfg = Configuration()
+
+        theme_dir = os.path.join(cfg.main_dir, 'Themes')
         i = 0
         d = {}
         for line in os.listdir(theme_dir):
@@ -126,7 +140,7 @@ class Theme:
             if not t.startswith('.'):
                 d[i] = t
                 i += 1
-        return(d)
+        return d
 
     def d_list():
 
@@ -144,7 +158,7 @@ class Theme:
             if not t.startswith('.'):
                 d[i] = t
                 i += 1
-        return(d)
+        return d
 
 class Cmd:
 
@@ -152,10 +166,12 @@ class Cmd:
 
         """(void) install choosen configuration file and theme"""
 
-        shutil.copy2(cfg_file, Configuration.config_dir())
+        cfg = Configuration()
+
+        shutil.copy2(cfg_file, cfg.config_dir)
         os.rename(cfg_file, 'be.shell')
         print("Configuration file copied..\n")
-        shutil.copytree(theme_dir, os.path.join(beshell.Configuration.main_dir, 'Themes'))
+        shutil.copytree(theme_dir, os.path.join(cfg.main_dir, 'Themes'))
         print("Theme directory copied..\nPlease reload the shell to see the applied theme")
 
     def clone():
@@ -215,6 +231,9 @@ class Cmd:
 
     def backup():
 
+        cfg = Configuration()
+        theme = Theme()
+
         bk_path = os.path.expanduser('~/.local/share/be.shell/backup')
 
         try:
@@ -225,16 +244,16 @@ class Cmd:
             print(ex)
 
         tmp_dir = tempfile.mkdtemp(dir=bk_path)
-        _tmp_dir = os.path.join(tmp_dir, Theme.name())
+        _tmp_dir = os.path.join(tmp_dir, theme.name)
 
-        shutil.copytree(Theme.path(), _tmp_dir)
-        shutil.copy2(Configuration.main_file(), _tmp_dir)
+        shutil.copytree(theme.path, _tmp_dir)
+        shutil.copy2(cfg.main_file, _tmp_dir)
 
         os.chdir(bk_path)
 
         for dirs in os.listdir(os.getcwd()):
             _dir = dirs
-            archive.compress(_dir, bk_path, name=Theme.name())
+            archive.compress(_dir, bk_path, name=theme.name)
             shutil.rmtree(tmp_dir)
 
         print('Everything done correctly. To restore your backup launch the script with the xxx flag')
