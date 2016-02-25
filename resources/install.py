@@ -33,7 +33,7 @@ try:
         print("Spam path's already registered into python sys.path")
     else:
         with open('spam.pth', 'w') as _f:
-            _f.write(os.environ['HOME'] + '.local/share/')
+            _f.write(os.environ['HOME'] + '/.local/share/')
         print('Registering pam into sys.path')
         subprocess.call(['sudo', 'cp', 'spam.pth', f])
 except Exception as ex:
