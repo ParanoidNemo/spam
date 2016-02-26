@@ -128,7 +128,7 @@ def playlist(client):
 #retrive cover image(s)
 def cover(path, client):
 
-    """(image) return the cover image for the current song or a blank one if
+    """(string) return the cover image for the current song or a blank one if
     any cover is found"""
 
     try:
@@ -137,11 +137,11 @@ def cover(path, client):
         pass
 
     path = os.path.expanduser(path)
-    default_image = os.path.join(theme.path, 'twolame', 'blank.jpg')
+    default_image = os.path.join(theme.path, "twolame", "blank.jpg")
 
     if os.path.exists(path):
-        i = os.path.join(path, process_mpd(client)[5], process_mpd(client)[7], 'cover.jpg')
-        i2 = os.path.join(path, process_mpd(client)[5], process_mpd(client)[7], 'cover.png')
+        i = os.path.join(path, process_mpd(client)[5], process_mpd(client)[7], "cover.jpg")
+        i2 = os.path.join(path, process_mpd(client)[5], process_mpd(client)[7], "cover.png")
         if os.path.isfile(i):
             im = i
         elif os.path.isfile(i2):
@@ -150,5 +150,5 @@ def cover(path, client):
             im = default_image
     else:
         im = default_image
-
+    
     return(im)
