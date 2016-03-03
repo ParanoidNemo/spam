@@ -175,8 +175,8 @@ def update(pm):
     else:
         print("Error: unknown package manager")
 
-    update = methods.call_command(command_line).split()
-    repo = len(update)
+    update = methods.call_command(command_line).split('\n')
+    repo = len(update) - 1
 
     if check.prg("cower"):
         update_aur = []
