@@ -27,10 +27,13 @@ def alsa_info(mixer):
     else:
         mute = True
 
-    if mixer.getvolume()[0] != mixer.getvolume()[1]:
-        mixer.setvolume(int(mixer.getvolume()[0]))
-        volume = mixer.getvolume()[0]
-    else:
+    try:
+        if mixer.getvolume()[0] != mixer.getvolume()[1]:
+            mixer.setvolume(int(mixer.getvolume()[0]))
+            volume = mixer.getvolume()[0]
+        else:
+            pass
+    except IndexError:
         volume = mixer.getvolume()[0]
 
     return([mute, str(volume)])
